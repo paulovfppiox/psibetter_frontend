@@ -1,0 +1,44 @@
+.custom-text-field      {
+    /* Style the entire text field */
+    border: 1px solid #18ec05;
+    border-radius: 30px;
+    padding: 10px;
+    /* Adjust label color for better contrast */
+    color: #03ce58;
+    width: 50%;
+  }
+  .centraliza {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;  
+  }
+  
+  .custom-text-field label {
+    /* Style the label specifically */
+    font-weight: bold;
+  }
+  
+  .custom-text-field .v-input__slot {
+    /* Style the input area */
+    margin-top: 5px;
+  }
+  
+  .custom-text-field input {
+    /* Style the input element itself */
+    font-size: 16px;
+    /* Adjust error color for better visibility */
+    color: #d608a3;
+  }
+  
+  .custom-text-field .v-input--has-error {
+    /* Style the field when there's an error */
+    border-color: red;
+  }
+  
+  .custom-text-field .v-messages__wrapper {
+    /* Style the error message container */
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }

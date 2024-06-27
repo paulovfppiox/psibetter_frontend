@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Senha</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #d4edda; /* Verde claro */
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        .password-container {
+            position: relative;
+            display: block;
+            margin: 10px auto;
+        }
+        input[type="password"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 12px;
+            width: 80%;
+            box-sizing: border-box;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #28a745; /* Verde */
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 5px; text-align: center; }
+    </style>
+</head>
+<body>
+
+
+
+    <div class="container">
+        <h2> Psibetter </h2>
+        <p> Redefina sua senha e confirme-a abaixo: </p>
+        <div class="password-container">
+            <input type="password" id="password1" placeholder="Digite sua senha">
+            <span class="toggle-password" onclick="togglePassword('password1')">👁️</span>
+        </div>
+        <div class="password-container">
+            <input type="password" id="password2" placeholder="Confirme sua senha">
+            <span class="toggle-password" onclick="togglePassword('password2')">👁️</span>
+        </div>
+        <div>
+            <button onclick="submitForm()">Enviar</button>
+            <div id="error-message" class="error"></div>
+        </div>
+    </div>
+
+    
+    <!-- MODAL MESSAGE || MODAL MESSAGE || MODAL MESSAGE || MODAL MESSAGE -->
+     <!-- MODAL MESSAGE || MODAL MESSAGE || MODAL MESSAGE || MODAL MESSAGE -->
+    <!-- MODAL MESSAGE || MODAL MESSAGE || MODAL MESSAGE || MODAL MESSAGE -->
+    <div id="modal" class="modal" onclick="hideModal()">
+        <div class="modal-content" onclick="event.stopPropagation();">
+            <span onclick="hideModal()" style="float:right;cursor:pointer;">&times;</span>
+            <h2> Senha alterada com sucesso! </h2>
+            <p> Sua senha foi alterada com sucesso. Retorne à página inicial</p>
+            <button onclick="window.location.href='https://google.com'">Página Inicial</button>
+        </div>
+    </div>
+
+    <script>
+
+        // Get the URL parameters
+        const data = new URLSearchParams( window.location.search ).get('data');
+        const email = data;
+
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            if (field.type === "password") {
+                field.type = "text";
+            } else {
+                field.type = "password";
+            }
+        }
+
+        function validatePassword(password) {
+            const minLength = 6;
+            const hasNumber = /\d/;
+            const hasLetter = /[a-zA-Z]/;
+
+            return password.length >= minLength && hasNumber.test(password) && hasLetter.test(password);
+        }
+
+        function showModal() { document.getElementById('modal').style.display = 'flex'; }
+        function hideModal() { document.getElementById('modal').style.display = 'none'; }        
+
+        async function consultaUsuarioAPI() 	{
+
+                        
+            // dados = { "dados": { "entidade": "usoEquipamento", "operacao": "devolucaoRead" } };	
+            dados = {
+                "data": {
+                    "entity": "usuarios",
+                    "operation": "consultar",
+                    "object":{
+		                "email": email
+	                }
+                }
+            };
+            // Convert data to JSON (optional but recommended)
+            const jsonData = JSON.stringify( dados );
+            console.log( "SendData >>>" + jsonData );
+
+
+            // Options for the fetch request
+            const options = {
+                method: 'POST', // HTTP method
+                headers: {
+                'Content-Type': 'application/json' // Set content type for JSON data
+                },
+                body: jsonData // Data to send in the request body
+            };
+
+            try {
+                const response = await fetch("http://localhost/psibetter/services-api.php", options);
+                // Check response status
+                if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+                const responseData = await response.json(); // Parse JSON response (optional)
+                console.log( "Response >> " + JSON.stringify( responseData.data ) );
+                return responseData.data; // Return the parsed response data
+            } catch (error) {
+            console.error('Error:', error);
+            }
+        }
+
+
+        async function atualizaSenhaAPI( userData ) 	{
+
+                                        
+                // dados = { "dados": { "entidade": "usoEquipamento", "operacao": "devolucaoRead" } };	
+                dados = {
+                    "data": {
+                        "entity": "usuarios",
+                        "operation": "atualizar",
+                        "object": userData
+                    }
+                };
+
+                // Convert data to JSON (optional but recommended)
+                const jsonData = JSON.stringify( dados );
+                console.log( "SendData upd senha >>>" + jsonData );
+
+
+                // Options for the fetch request
+                const options = {
+                    method: 'POST', // HTTP method
+                    headers: {
+                    'Content-Type': 'application/json' // Set content type for JSON data
+                    },
+                    body: jsonData // Data to send in the request body
+                };
+
+                try {
+                    const response = await fetch("http://localhost/psibetter/services-api.php", options);
+                    // Check response status
+                    if (!response.ok) {
+                    throw new Error(`Error! status: ${response.status}`);
+                }
+
+                    const responseData = await response.json(); // Parse JSON response (optional)
+                    // console.log( "Response?!?!? " + JSON.stringify( responseData.code ) );
+                    
+                    /* Caso sucesso */
+                    if ( responseData.code == 0 )
+                         showModal();
+
+                    return responseData.data; // Return the parsed response data
+                }   catch (error)   {
+                    console.error('Error:', error);
+                }
+         }
+
+        async function submitForm() {
+
+            //alert( "Email passado na URL " + data );
+            
+            const password1 = document.getElementById('password1').value;
+            const password2 = document.getElementById('password2').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (password1 !== password2) {
+                errorMessage.textContent = "As senhas não coincidem.";
+                return;
+            }
+
+            if (!validatePassword(password1)) {
+                errorMessage.textContent = "A senha deve ter 6 caracteres, com números e letras.";
+                return;
+            }
+
+            errorMessage.textContent = '';
+            var userData = await consultaUsuarioAPI();
+            userData.senha = password1;
+
+            //alert( "User ID?!? " + userData.userID + " || " + userData.email + " || " + userData.senha );
+            var resp = await atualizaSenhaAPI( userData );
+            
+         }
+
+
+/**
+ *  ---------- CONSULTA O ID do USER pelo email -----------
+ * {
+"data":
+{
+	"entity":"usuarios",
+	"operation":"consultar",
+	"object":{
+		   "email": "d3dd@gmail.com" 
+	}
+  }
+}
+**/
+
+
+/****** MUDAR A SENHA AQUI ********
+{
+"data":
+{
+	"entity":"usuarios",
+	"operation":"atualizar",
+	"object":{
+		"id":"8", "email": "d3dd@gmail.com", "senha": "abc123"
+	}
+  }
+}
+****** MUDAR A SENHA AQUI ********  
+*/
+
+
+
+    </script>
+</body>
+</html>

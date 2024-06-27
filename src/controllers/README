@@ -1,0 +1,18 @@
+
+CONTROLLERS: 
+
+Estruturas de dados locais de cada componente.. Aqui haverão eventuais
+conversões de tipos da UI para o Backend... e vice-versa...
+Lidar com interações
+
+Exemplos de dados (SIGOP):
+* Equipamentos
+* Usuários
+* Agentes
+
+
+
+Exemplos de dados (PsiBetter):
+* Usuários (Médicos)
+* Usuários (Pacientes)
+* Tipos de dados usados nas chamadas a APIs
