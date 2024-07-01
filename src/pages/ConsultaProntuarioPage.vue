@@ -22,11 +22,11 @@
       <!-- ########################  MODAL ############################## -->
 
 
-      <!-- dadosUsuario?!?!  {{  JSON.stringify( dadosUsuario ) }} -->
-      modoEdicao ?!?! {{  modoEdicao  }} <br>
-      idUsuario {{  idUsuario  }} <br>
-      isEdicaoOn {{ isEdicaoOn }} <br>
-      shareDataUsuario {{ shareDataUsuario }} <br>
+      <!-- dadosUsuario?!?!  {{  JSON.stringify( dadosUsuario ) }} 
+      modoEdicao ?!?!  {{  modoEdicao  }}     <br>
+      idUsuario        {{  idUsuario  }}      <br>
+      isEdicaoOn       {{ isEdicaoOn }}       <br>
+      shareDataUsuario {{ shareDataUsuario }} <br>-->
 
       <div class="centralizaToogle">
           <v-switch
@@ -78,7 +78,8 @@ import Prontuario from '@/controllers/Prontuario.js';
  
 const prontuario = new Prontuario();
 
-export default {
+export default                
+{
   name: 'ConsultaProntuarioPage',
   components:            { 
     AppFormUsuario,
@@ -177,9 +178,26 @@ export default {
             if ( !this.formsValidos[0] || !this.formsValidos[1] )
                   return;
             
-            this.prontuario.setDadosProntuario( this.dadosProntuario.dadosUsuario , this.dadosProntuario.dadosClinicos );
-            this.prontuario.atualizarProntuario( this.dadosProntuario.dadosUsuario , this.dadosProntuario.dadosClinicos ).then(response => {
-            console.log('Cadastro Prontuário Response:', response);
+                this.prontuario.setDadosProntuario( this.dadosProntuario.dadosUsuario , this.dadosProntuario.dadosClinicos );
+                this.prontuario.atualizarProntuario( this.dadosProntuario.dadosUsuario , this.dadosProntuario.dadosClinicos ).then(response => {
+                console.log('Cadastro Prontuário Response:', response);
+
+                if ( response.code == 0 )      
+                {
+                     this.$bus.emit('showModal', { message: response.message, msgType: "success"} );
+                } else {
+                      this.$bus.emit('showModal', { message: response.message, msgType: "warning"} );
+
+                      /** OBS: No caso de erro, os valores dos comboboxes são concatenados.
+                      * Quando o formulário é preenchido e ocorre uma primeira tentativa de envio, caso haja algum erro no
+                      * lado do servidor (ex: Nome ou email já existentes),
+                      * em alguns dos campos, todos eles (que sejam arrays) sofrerão um join (em prontuarioModel).
+                      * A partir da segunda tentativa, esses campos que deveriam ser arrays, estão como strings.
+                      * Para mitigar esse problema, antes de enviar os dados, preciso chegar se trata-se de uma string 
+                      * (segunda tentativa em diante). */
+                      this.$bus.emit('busAjustarComboboxes', true );
+                 }
+
             }).catch(error => {
               console.error('Error creating user:', error);
             });

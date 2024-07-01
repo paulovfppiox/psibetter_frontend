@@ -1,4 +1,7 @@
 <template>
+
+    locale {{ locale }}
+
     <v-text-field
       v-model="formattedDate"
       bg-color="white"
@@ -11,15 +14,20 @@
           mdi-calendar
         </v-icon>
       </template>
-   
+      
+      
         <v-menu 
             offset-y
             activator="parent"
             ref="menu" v-model="menu" transition="scale-transition" :close-on-content-click="false">
-          <v-date-picker v-model="selectedDate" :locale="locale" @change="onDateSelected">
-            <template v-slot:default="{ formattedValue }">
-              <span>{{ formattedValue }}</span>
-            </template>
+          <v-date-picker 
+             v-model="selectedDate" 
+             :locale="locale" 
+             @change="onDateSelected">
+
+             <template v-slot:default="{ formattedValue }">
+                <span>{{ formattedValue }}</span>
+             </template>
           </v-date-picker>
         </v-menu> 
         

@@ -22,7 +22,7 @@ export default class ProntuarioModel {
       var strDoencasPreexistentes; 
       var strDrogas; 	
       
-      alert("TIPO?!?! " + typeof sendData.data.object.dadosClinicos.cirurgias );
+      // alert("TIPO?!?! " + typeof sendData.data.object.dadosClinicos.cirurgias );
       if ( sendData.data.object.dadosClinicos.cirurgias != null )
            strCirurgias = sendData.data.object.dadosClinicos.cirurgias.join(", ");
          

@@ -1,10 +1,14 @@
 <template>
   
   <v-container style="background-color: #DCEDC8" >
-    <label><b>  Dados Clínicos  </b></label>
     
-    formReadonly ?!? {{  formReadonly  }} <br>
-    formValido {{ formValido }}
+    <div class="titulo-form-container">  
+       <label><b>  Dados Clínicos  </b></label>
+       <MyChecklistIcon v-if="formValido"/>
+    </div>
+    
+   <!-- formReadonly ?!? {{  formReadonly  }} <br>
+    formValido {{ formValido }} -->
 
   <v-form v-model="formValido" style="background-color: #DCEDC8" ref="form">
 
@@ -72,7 +76,7 @@
 
           <v-container class="horizontal-checkboxes">
                 <v-checkbox
-                  style="font-size: 10px; color:black"
+                  style="font-size: 10px; margin-top: 20px; color:black"
                   v-model="dadosClinicos.bebe"
                   label="Bebe?"
                   value="1"
@@ -81,7 +85,7 @@
                 ></v-checkbox>
                 
                 <v-checkbox
-                style="font-size: 10px; color:black"
+                  style="font-size: 10px; margin-top: 20px; color:black"
                   v-model="dadosClinicos.fuma"
                   label="Fuma?"
                   :readonly="formReadonly"
@@ -95,7 +99,7 @@
 
           <v-col cols="12" md="4">
             <v-checkbox
-                  style="font-size: 10px;"
+                  style="font-size: 10px; margin-top: 20px"
                   v-model="dadosClinicos.atividadeFisica"
                   label="Atividade Física?"
                   :readonly="formReadonly"
@@ -249,14 +253,19 @@
 </v-container>
 </template>
 <script>
-/* eslint-disable */ 
+/* eslint-disable */
+import MyChecklistIcon from '@/components/MyChecklistIcon.vue';
+
 import axios from 'axios';
  export default {
      props: {
             idUsuario: Number,  
             shareData: Boolean,
             modoEdicao: String  /** EDICAO or LEITURA */
-    }, 
+    },
+    components: {
+      MyChecklistIcon
+    },
     watch: {
           idUsuario(newValue)    {
               alert( "Valor? " + newValue );
@@ -289,8 +298,6 @@ import axios from 'axios';
           }
       },
     name:'AppFormDadosClinicos',
-    components: {
-    },
     computed: {
         PATH_ATUAL()
         {
@@ -416,9 +423,30 @@ import axios from 'axios';
 
       
   },
-  mounted()   {
+  mounted()     {
         // Add event listener for key press on the entire document
         document.addEventListener('keypress', this.handleKeyPress);
+
+        this.$bus.on('busAjustarComboboxes', ( flag ) => {
+            // alert("*** AppFormDadosClinicos || ajustar aqui os valores do form" );
+            // alert( "DROGAS?" + JSON.stringify( this.dadosClinicos.drogas ) );
+
+            if ( ( typeof this.dadosClinicos.cirurgias ) == "string" )
+                   this.dadosClinicos.cirurgias = this.dadosClinicos.cirurgias.split(", ");
+            
+            if ( ( typeof this.dadosClinicos.alergias ) == "string" )
+                   this.dadosClinicos.alergias = this.dadosClinicos.alergias.split(", ");
+            
+            if ( ( typeof this.dadosClinicos.medicacoesEmUso ) == "string" )
+                   this.dadosClinicos.medicacoesEmUso = this.dadosClinicos.medicacoesEmUso.split(", ");
+            
+            if ( ( typeof this.dadosClinicos.doencasPreexistentes ) == "string" )
+                   this.dadosClinicos.doencasPreexistentes = this.dadosClinicos.doencasPreexistentes.split(", ");
+
+            if ( ( typeof this.dadosClinicos.drogas ) == "string" )
+                   this.dadosClinicos.drogas = this.dadosClinicos.drogas.split(", ");
+          
+        })
   }, 
   beforeDestroy() {
         // Remove event listener to avoid memory leaks
@@ -528,6 +556,17 @@ import axios from 'axios';
   flex-direction: row;
   align-items: center;
   margin-top: -15px;
-}
-</style>
+} 
+  .titulo-form-container {
+    display: flex;
+    align-items: center; /* Center vertically align */
+    justify-content: center; /* Center horizontally */
+    text-align: center; /* Center text inside label */
+  }
+
+  .titulo-form-container  label {
+    font-weight: bold;
+    margin-right: 10px; /* Adjust spacing between elements */
+  }
+ </style>
 

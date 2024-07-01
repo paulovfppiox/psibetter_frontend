@@ -1,8 +1,8 @@
 <template>
   
-  <h2> Minha Agenda </h2>
+  <h1> Minha Agenda </h1>
   
-  <MyFullCalendario/>
+  <MyFullCalendario style="margin-top: 10px"/>
   <!-- <FullCalendar :options="calendarOptions" />-->
   
 </template>

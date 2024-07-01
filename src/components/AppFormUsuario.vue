@@ -1,11 +1,15 @@
 <template>
     
     <v-container style="background-color: #DCEDC8" >
-    <label><b>  Dados Gerais do Paciente  </b></label>
+   
+    <div class="titulo-form-container">  
+       <label><b>  Dados Gerais do Paciente  </b></label>
+       <MyChecklistIcon v-if="formValido"/>
+    </div>
 
-    formReadonly ?!? {{  formReadonly  }} <br>
+    <!--formReadonly ?!? {{  formReadonly  }} <br>
     formValido? {{  formValido  }} 
-    <!-- PATH_ATUAL {{  PATH_ATUAL  }}
+     PATH_ATUAL {{  PATH_ATUAL  }}
     dadosUsuario {{ JSON.stringify( dadosUsuario ) }} -->
     
     <v-form class="mt-5" v-model="formValido" style="background-color: #DCEDC8" ref="form">
@@ -196,7 +200,8 @@
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
-import MyDataInput from '@/components/MyDataInput.vue';
+import MyDataInput     from '@/components/MyDataInput.vue';
+import MyChecklistIcon from '@/components/MyChecklistIcon.vue';
 //import Usuario from '@/controllers/Usuario.js'; 
 import axios from 'axios';
 
@@ -252,7 +257,8 @@ export default {
       },
       name:'AppFormUsuario',
       components: {
-        MyDataInput
+        MyDataInput,
+        MyChecklistIcon
       }, 
       computed: {
         PATH_ATUAL()
@@ -267,7 +273,7 @@ export default {
           //dadosUsuario: usuario.getDadosUsuario(),
           //usuario,
           dadosUsuario: {
-            dataNascimento: "1987-01-01",
+            dataNascimento: "",
             nome: '',
             genero: '',
             celular: null,
@@ -374,6 +380,8 @@ export default {
     mounted()   {
         // Add event listener for key press on the entire document
         document.addEventListener('keypress', this.handleKeyPress); 
+
+        
     }, 
     beforeDestroy() {
         // Remove event listener to avoid memory leaks
@@ -442,6 +450,16 @@ export default {
    </script>
  
  <style> 
-  
+  .titulo-form-container {
+    display: flex;
+    align-items: center; /* Center vertically align */
+    justify-content: center; /* Center horizontally */
+    text-align: center; /* Center text inside label */
+  }
+
+  .titulo-form-container  label {
+    font-weight: bold;
+    margin-right: 10px; /* Adjust spacing between elements */
+  }
  </style>
  

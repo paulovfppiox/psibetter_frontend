@@ -44,5 +44,26 @@ export default class UsuarioModel {
     return response.data;
 }
 
+
+async removerEventoAPI( nomePaciente, dataHoraIni )
+  {
+
+    const sendData = {
+        "data" : {
+            "entity":"agenda",
+            "operation":"deletar",
+            "object": {
+                "nomePaciente" : nomePaciente,
+                "dataHoraInicio": dataHoraIni
+            }
+        }
+    };
+    // alert( "URL: " + this.$SERVICES_ENDPOINT_URL );
+    console.log( "- AgendaModel ||| Send Data >> " +  JSON.stringify( sendData ) );
+    const response = await axios.post( "http://localhost/psibetter/services-api.php", sendData );
+    //console.log(" CADASTRANDO Agenda Evento?? " + JSON.stringify( response ) );
+    return response.data;
+}
+
   // Add more methods as needed
 }

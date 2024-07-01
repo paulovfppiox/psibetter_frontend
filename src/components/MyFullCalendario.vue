@@ -1,39 +1,34 @@
 <template>
   <div class='demo-app'>
-    <div class='demo-app-sidebar'>
+    <div class='demo-app-sidebar' v-if="this.$IS_MOBILE_APP">
       <div class='demo-app-sidebar-section'>
-        <h2>Instructions</h2>
+        <h2>Instruções de Uso</h2>
         <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
+          <li> Para adicionar uma nova consulta, basta selecionar as datas. </li>
+          <li> Para deletar uma consulta, basta clicar sobre ela. </li>
         </ul>
       </div>
       <div class='demo-app-sidebar-section'>
         <label>
-          <input
-            type='checkbox'
-            :checked='calendarOptions.weekends'
-            @change='handleWeekendsToggle'
-          />
-          toggle weekends
+          <input type='checkbox' :checked='calendarOptions.weekends' @change='handleWeekendsToggle'/>
+              Visualizar finais de semana
         </label>
       </div>
       <div class='demo-app-sidebar-section'>
-        <h2>All Events ({{ currentEvents.length }})</h2>
-        <ul>
+        <h2> N° total de consultas agendadas: {{ currentEvents.length }} </h2>
+        <!-- <ul>
           <li v-for='event in currentEvents' :key='event.id'>
             <b>{{ event.startStr }}</b>
             <i>{{ event.title }}</i>
           </li>
-        </ul>
+        </ul> -->
       </div>
     </div>
 
     <!-- MENUS_PACIENTES_NOMES {{ JSON.stringify( MENUS_PACIENTES_NOMES ) }}
     tituloNovoEvento {{ tituloNovoEvento }}
     modalNovoEventoOn {{ modalNovoEventoOn }}
-    dadosNovoEvento {{  dadosNovoEvento  }}-->
+    dadosNovoEvento {{  dadosNovoEvento  }} -->
 
     <v-dialog v-model="modalNovoEventoOn" max-width="500px">
       <v-card> 
@@ -62,12 +57,14 @@
 
     
 
-    <!-- calendarLocale {{  calendarOptions.calendarLocale }} -->
+    <!-- calendarLocale {{  calendarOptions.calendarLocale }}
+    :locale="calendarOptions.calendarLocale"
+    -->
     <div class='demo-app-main'>
       <FullCalendar
+
         class='demo-app-calendar'
         :options='calendarOptions'
-        :locale="calendarOptions.calendarLocale"
         @datesSet="handleDatesSet"
         ref="calendarRef"
       >
@@ -90,7 +87,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import { INITIAL_EVENTS, createEventId } from '@/utils/eventUtils.js'
 
 // Import locale data directly in the component
-import ptLocale from '@fullcalendar/core/locales/pt-br';
+// import ptLocale from '@fullcalendar/core/locales/pt-br';
 
 import Agenda from '@/controllers/Agenda.js'; 
  
@@ -105,6 +102,7 @@ export default defineComponent({
       
       dadosEvento: agenda.getDados(),
       agenda,
+      eventosBD : [],
 
       tituloNovoEvento:null,
       modalNovoEventoOn: false,
@@ -112,7 +110,7 @@ export default defineComponent({
 
       cores: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
       calendarOptions: {
-        calendarLocale: ptLocale,
+        // calendarLocale: ptLocale,
         plugins: [
           dayGridPlugin,
           timeGridPlugin,
@@ -123,9 +121,11 @@ export default defineComponent({
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
+        editable: false, // Disable drag-and-drop
+        droppable: false,
+
         initialView: 'dayGridMonth',
         initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
-        editable: true,
         selectable: true,
         selectMirror: true,
         dayMaxEvents: true,
@@ -137,27 +137,30 @@ export default defineComponent({
         eventAdd: this.testeAdd,
         eventChange: this.testeChange,
         eventRemove: this.testeRemove,
-        
+
+         // Callback when the view changes
+         viewDidMount: this.onViewChange,
+         viewWillUnmount: this.onViewChange,
       },
       currentEvents: [],
     }
   },
   computed: {
-      MEUS_PACIENTES_DATA()           {
+      MEUS_PACIENTES_DATA()        {
           return this.$store.state.meusPacientes;
       },
-      MENUS_PACIENTES_NOMES()         {
+      MENUS_PACIENTES_NOMES()      {
           return this.$store.state.meusPacientes.map(obj => obj.nome);
       }
   },
-  created() {
+  created()       {
   },
+  mounted()       {
 
-  mounted() {
+      
       const dataIni = new Date("2024-04-14T00:00:00");
       const dataFim = new Date("2024-06-16T19:00:00");
-      let events = [ {} ];
-
+      
       this.agenda.consultarEventos( dataIni, dataFim ).
       then(response => {
         console.log('Cadastro Evento de Agenda Response:', response);
@@ -168,16 +171,16 @@ export default defineComponent({
 
              for(var i=0; i<eventos.length; i++)  {
                 
-                 events[i] = {
+                 this.eventosBD[i] = {
                     id : eventos[i].id,
                     title : eventos[i].nomePaciente,
                     start : eventos[i].dataHoraInicio,
                     end : eventos[i].dataHoraFim,
-                    color : this.cores[this.rnd(0, this.cores.length - 1)],
+                    color : this.cores[this.rnd(0, this.cores.length - 1)]
                  }
              }
-             this.addListaEventos( events );
-             console.log( JSON.stringify( events ) );
+             this.addListaEventos( this.eventosBD );
+             console.log( JSON.stringify( this.eventosBD ) );
         } 
       }).catch(error => {
           console.error('Error creating user:', error);
@@ -190,11 +193,56 @@ export default defineComponent({
     rnd (a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a
     },
+    // Method to handle view change
+    onViewChange(viewInfo)   {
+
+        // Logs the type of the current view (e.g., 'dayGridMonth', 'timeGridWeek', etc.)
+        alert('View changed:', viewInfo.view.type); 
+        // You can perform actions based on the view type here
+        if (viewInfo.view.type === 'dayGridMonth') {
+            alert('Switched to month view');
+        }
+    },
+    addEventoAPI( dadosEvento )  {
+      
+        this.agenda.setDados( dadosEvento );
+        this.agenda.cadastrarEvento( dadosEvento ).then(response => {
+            console.log('Cadastro Evento Response:', response);
+
+            alert( response.code + " ||| " + response.message );
+            //if ( response.code == 0 )      {
+            //}
+        }).catch(error => {
+          console.error('Error creating user:', error);
+        });
+    },  
+    removeEventoAPI( dadosEvento )  {
+      
+      this.agenda.setDados( dadosEvento );
+      this.agenda.removerEvento( dadosEvento.title, dadosEvento.startStr ).then(response => {
+           console.log('Cadastro Evento Response:', response);
+
+           alert( response.code + " ||| " + response.message );
+           //if ( response.code == 0 )      {
+           //}
+      }).catch(error => {
+        console.error('Error creating user:', error);
+      });
+    }, 
     testeAdd( eventData )         {
         alert("ADDD !!!!");
     },
+
+    /** Atualiza o evento !!!!!!! */
     testeChange( eventData )      {
-        alert("CHANGE !!!! !!!! " + JSON.stringify( eventData ) );
+        alert("*** CHANGE !!!! !!!! " + JSON.stringify( eventData ) ); 
+
+        this.dadosNovoEvento  = eventData.event;
+        this.tituloNovoEvento = eventData.oldEvent.title;
+        // alert("CHANGE !!!! !!!! >> Nome = " +  eventData.oldEvent.title );
+
+        this.removeEventoAPI( eventData.oldEvent );
+        this.addEvento( eventData.event );
     },
     testeRemove( eventData )      {
         alert("REMOVE !!!! !!!!");
@@ -273,20 +321,28 @@ export default defineComponent({
            return;
       }
       console.log("** Adicionando novo evento: " + JSON.stringify( this.dadosNovoEvento ));
-      let calendarApi = this.dadosNovoEvento.view.calendar;
+      // let calendarApi = this.dadosNovoEvento.view.calendar;
+      const calendarApi = this.$refs.calendarRef.getApi();
       calendarApi.unselect() // clear date selection
       
       let title = this.tituloNovoEvento;
       if (title) {
-        calendarApi.addEvent({
-          id: createEventId(),
-          title,
-          start: this.dadosNovoEvento.startStr,
-          end: this.dadosNovoEvento.endStr,
-          color: this.cores[this.rnd(0, this.cores.length - 1)],
-          allDay: this.dadosNovoEvento.allDay
-        })
+          calendarApi.addEvent({
+              id: createEventId(),
+              title,
+              start: this.dadosNovoEvento.startStr,
+              end: this.dadosNovoEvento.endStr,
+              color: this.cores[this.rnd(0, this.cores.length - 1)],
+              allDay: this.dadosNovoEvento.allDay
+          })
       }
+      var evento = {
+          nomePaciente: this.tituloNovoEvento, 
+          dataHoraInicio: this.dadosNovoEvento.startStr,
+          dataHoraFim: this.dadosNovoEvento.endStr
+      }
+      this.addEventoAPI( evento );
+      this.modalNovoEventoOn = false;
     },
     addListaEventos( events )                 {
       /*const events = [
@@ -297,44 +353,16 @@ export default defineComponent({
           end: new Date('2024-06-10T13:30:00'),
           color:'red'
           // color: this.cores[this.rnd(0, this.cores.length - 1)]
-        },
-        {
-          id: createEventId(),
-          title: 'Event TESTE 2',
-          start: new Date('2024-06-11T12:00:00'),
-          end: new Date('2024-06-11T13:30:00'),
-          color: this.cores[this.rnd(0, this.cores.length - 1)]
-        }
+        }, 
       ];*/
       
       // Set events array to calendarOptions
       this.calendarOptions.events = events;      
-      // Update FullCalendar with new events
       const calendarApi = this.$refs.calendarRef.getApi();
       calendarApi.removeAllEvents(); // Clear existing events (optional)
       calendarApi.addEventSource(events); // Add new events
         
-    },
-    handleDateSelectOLD(selectInfo) {
-
-          console.log("** Adicionando novo evento: " + JSON.stringify( selectInfo ));
-          this.modalNovoEventoOn = true;
-
-          let title = prompt('Please enter a new title for your event')
-          let calendarApi = selectInfo.view.calendar
-
-          calendarApi.unselect() // clear date selection
-
-          if (title) {
-            calendarApi.addEvent({
-              id: createEventId(),
-              title,
-              start: selectInfo.startStr,
-              end: selectInfo.endStr,
-              allDay: selectInfo.allDay
-            })
-          }
-    },
+    }, 
     handleDateSelect(selectInfo) {
 
       this.modalNovoEventoOn = true;
@@ -342,8 +370,12 @@ export default defineComponent({
       
     },
     handleEventClick(clickInfo) {
+
+      alert( JSON.stringify( clickInfo.event ) );
+
       if ( confirm( `Você tem certeza que deseja remover o evento '${clickInfo.event.title}' ?` ) ) {
-        clickInfo.event.remove()
+           clickInfo.event.remove();
+           this.removeEventoAPI( clickInfo.event );
       }
     },
     handleEvents(events) {
@@ -377,11 +409,27 @@ b { /* used for event dates/times */
   margin-right: 3px;
 }
 
+/* 
+MOBILE/TABLETS APP 
+  Aplica esse CSS, até o máximo de width=750px */
+  @media ( min-width: 768px )   
+{
+    .demo-app {
+      display: flex;
+      min-height: 100%;
+      font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+      font-size: 14px;
+      background-color: rgb(224, 60, 9);
+    }
+}
+
+
 .demo-app {
   display: flex;
   min-height: 100%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
+  background-color: lightblue;
 }
 
 .demo-app-sidebar {

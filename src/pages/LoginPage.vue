@@ -10,6 +10,7 @@
       <h1 style="margin-top: 20px; margin-bottom: 20px;"> {{this.$APP_NAME}}  </h1>
       -->
     
+        
       <v-card
       class="mx-auto pa-10 pb-8 mb-5"
       elevation="8" 
@@ -94,11 +95,12 @@ const TAM_MINIMO_SENHA = 10;
 
   /* eslint-disable */
   import axios from 'axios';
-  import UtilsMixin  from '@/utils/UtilsMixin.js';
+  import UtilsMixin  from '@/utils/UtilsMixin.js'; 
+  
    export default {
     mixins: [UtilsMixin],
     components:            { 
-      
+       
     },
     data: () => ({
       selectedTime: null,
@@ -113,10 +115,7 @@ const TAM_MINIMO_SENHA = 10;
       senhaRules: [
         value => ( value && value.length <= TAM_MINIMO_SENHA ) || 'Senha deve conter no mínimo 6 caracteres'
       ]
-    }),
-    components:                 {
-        // RegistroUsuarioPage
-    }, 
+    }),  
     computed:    {       
       CARD_MAX_WIDTH()          {
           // alert( window.innerWidth  );

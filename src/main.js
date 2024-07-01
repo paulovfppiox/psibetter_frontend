@@ -9,19 +9,35 @@ import router from './router/router.js';
 import store  from './store/store.js';
 import UtilsMixin from '@/utils/UtilsMixin.js'; // Adjust path as necessary
 import ListasMixin from '@/utils/ListasMixin.js'; // Adjust path as necessary
-
-
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-
-// Components
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
 import App from './App.vue'
 
+// ################ Import VueI18n and translations ################ 
+// ################ Import VueI18n and translations ################ 
+import { createI18n } from 'vue-i18n';
+import messages from '@/utils/locales.js';
+
+
+// Create VueI18n instance with messages
+const i18n = createI18n({
+  locale: 'pt-BR', // Set the initial locale here
+  fallbackLocale: 'en', // Fallback locale in case translation is missing
+  messages, // Your imported translations
+});
+
+// ################ Import VueI18n and translations ################ 
+// ################ Import VueI18n and translations ################
+
+// Create Vuetify instance 
 const vuetify = createVuetify({
   components,
   directives,
   icons: {
     defaultSet: 'mdi', // This is already the default value - only for display purposes
+  },
+  lang: {
+    t: (key, ...params) => i18n.global.t(key, params),
   },
 })
 
@@ -53,4 +69,5 @@ app.use(calendar);
 app.use(router)
 app.use(store)
 app.use(vuetify)
+app.use(i18n)
 app.mount('#app')

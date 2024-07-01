@@ -1,5 +1,6 @@
 <template> 
   <div style="width:90%; margin-left:5%; margin-right:5%" >
+    <v-text-field v-model="search" label="Consultar Paciente" placeholder="Insira um valor para buscar paciente..." outlined></v-text-field>
     <v-data-table-virtual
       :headers="headers"
       :items="pacientesData"
@@ -7,9 +8,13 @@
       item-value="name"
       :mobile="this.$IS_MOBILE_APP"
       :show-select="true"
+      :search="search"
       select-strategy="single"
-      @click:row="handleRowClick"
-    ></v-data-table-virtual>
+      @click:row="handleRowClick">
+
+     
+
+  </v-data-table-virtual>
   </div>
   
  <!-- 
@@ -40,6 +45,11 @@ export default      {
         { title: 'Data Registro', align: 'end', key: 'dataRegistro' },
     ],
     pacientesData: [],
+
+    /** Chaves de Busca */
+    nome: '',
+    profissao: '',
+    search: '',
     /* pacientesData: [
           {
             nome: 'Speedster',
@@ -58,7 +68,15 @@ export default      {
             dataRegistro: '2012-01-01'
           },
         ],*/
-    }), 
+    }),
+    watch: {
+      nome () {
+        this.search = String(Date.now())
+      },
+      profissao () {
+        this.search = String(Date.now())
+      },
+    }, 
     computed: {    
         DADOS_USUARIO()  {
           return this.$store.state.user;
@@ -108,7 +126,7 @@ export default      {
 
         }
     },
-    async created()   
+    async mounted()   
     {
          await this.getPacientesData();
     },

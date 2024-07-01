@@ -226,10 +226,20 @@
                  if ( response.code == 0 )      {
                       // this.$bus.emit('showModal', response.message );
                       this.$bus.emit('showModal', { message: response.message, msgType: "success"} );
+                      this.$router.push({ path: '/home', replace:true  });
 
                  } else {
-                      // this.$bus.emit('showModal', response.message );
                       this.$bus.emit('showModal', { message: response.message, msgType: "warning"} );
+
+                      /** OBS: No caso de erro, os valores dos comboboxes são concatenados.
+                      * Quando o formulário é preenchido e ocorre uma primeira tentativa de envio, caso haja algum erro no
+                      * lado do servidor (ex: Nome ou email já existentes),
+                      * em alguns dos campos, todos eles (que sejam arrays) sofrerão um join (em prontuarioModel).
+                      * A partir da segunda tentativa, esses campos que deveriam ser arrays, estão como strings.
+                      * Para mitigar esse problema, antes de enviar os dados, preciso chegar se trata-se de uma string 
+                      * (segunda tentativa em diante). */ 
+
+                      this.$bus.emit('busAjustarComboboxes', true );
                  }
 
             }).catch(error => {
@@ -246,29 +256,8 @@
              this.shareDataUsuario  = true; 
              
 
-             /** Quando o formulário é preenchido e ocorre uma primeira tentativa de envio, caso haja algum erro,
-              * em alguns dos campos, todos eles (que sejam arrays) sofrerão um join (em prontuarioModel).
-              * A partir da segunda tentativa, esses campos que deveriam ser arrays, estão como strings.
-              * Para mitigar esse problema, antes de enviar os dados, preciso chegar se trata-se de uma string 
-              * (segunda tentativa em diante). */
-             if ( ( typeof this.dadosProntuario.dadosClinicos.cirurgias ) == "string" )
-                    this.dadosProntuario.dadosClinicos.cirurgias =  this.dadosProntuario.dadosClinicos.cirurgias.split(", ");
-              
-            if ( ( this.dadosProntuario.dadosClinicos.alergias != null ) == "string" )
-                   this.dadosProntuario.dadosClinicos.alergias = this.dadosProntuario.dadosClinicos.alergias.split(", ");
-              
-            if ( ( this.dadosProntuario.dadosClinicos.medicacoesEmUso != null ) == "string" )	 
-                   this.dadosProntuario.dadosClinicos.medicacoesEmUso = this.dadosProntuario.dadosClinicos.medicacoesEmUso.split(", ");
-              
-            if ( ( this.dadosProntuario.dadosClinicos.doencasPreexistentes != null ) == "string" )	 	 
-                   this.dadosProntuario.dadosClinicos.doencasPreexistentes = this.dadosProntuario.dadosClinicos.doencasPreexistentes.split(", ");
-
-            if ( ( this.dadosProntuario.dadosClinicos.drogas != null ) == "string" )	 	 	 
-                   this.dadosProntuario.dadosClinicos.drogas = this.dadosProntuario.dadosClinicos.drogas.split(", ");
-
-             setTimeout( this.sendDataAPI, 50 );
-
              
+             setTimeout( this.sendDataAPI, 50 );
         }
     }
   }
