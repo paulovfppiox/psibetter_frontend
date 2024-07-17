@@ -1,15 +1,18 @@
 <template>
-    <h2 class="ma-3"> Meus Pacientes </h2>
+    
+    <h1 class="text-h5 text-lg-h5 mt-5 mb-5" style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
+      <b> Meus Pacientes </b>
+    </h1>
       
-    <!-- tab  {{ tab }} -->
-    DADOS_USUARIO {{ JSON.stringify( DADOS_USUARIO ) }}
+    <!-- tab  {{ tab }} 
+    DADOS_USUARIO {{ JSON.stringify( DADOS_USUARIO ) }} -->
     <v-card>
     <v-tabs
        v-model="tab"
        bg-color="secondary">
           <v-tab value="tab-meus-pacientes"       variant="tonal" size="large" class="text-caption"> Meus Pacientes </v-tab>
           <v-tab value="tab-cadastrar-pacientes"  variant="tonal" class="text-caption"> Cadastrar Paciente </v-tab>
-          <v-tab value="tab-consultar-pacientes"  variant="tonal" class="text-caption"> Consultar Pacientes </v-tab>
+          <!-- <v-tab value="tab-consultar-pacientes"  variant="tonal" class="text-caption"> Consultar Pacientes </v-tab> -->
     </v-tabs>
 
     <v-card-text>
@@ -39,58 +42,62 @@
                     <v-card
                         color="secondary"
                         append-icon="mdi-open-in-new"
-                        class="mx-auto" 
-                        max-width="344"
-                        prepend-icon="mdi-account-search"
-                        rel="noopener"
-                        subtitle="Consulte dados cadastrais aqui."
-                        @click="handleClick('tab-consultar-pacientes')"
-                        target="_blank"
-                        title="Consultar Pacientes"
-                    ></v-card>
-              </div>
-
-              <div class="w-100 pa-4 ma-2 " >
-                    <v-card
-                        color="secondary"
-                        append-icon="mdi-open-in-new"
                         class="mx-auto"
-                        href="https://github.com/vuetifyjs/vuetify/"
+                        @click="onHistoricoClick()"
                         max-width="344"
                         prepend-icon="mdi-chart-box-plus-outline"
                         rel="noopener"
                         subtitle="Detalhe "
                         target="_blank"
-                        title="Histórico de Pacientes"
+                        title="Histórico de Consultas"
                     ></v-card>
               </div>
-            </div>  
 
 
+              <div class="w-100 pa-4 ma-2 " >
+                    <v-card
+                        color="secondary"
+                        append-icon="mdi-open-in-new"
+                        class="mx-auto" 
+                        max-width="344"
+                        prepend-icon="mdi-account-search"
+                        rel="noopener"
+                        subtitle="Consulte dados cadastrais aqui."
+                        target="_blank"
+                        title="Prontuário de Pacientes"
+                    ></v-card>
+              </div>
+           </div>
         </v-tabs-window-item>
         
         <v-tabs-window-item value="tab-cadastrar-pacientes">
             <AppFormUsuario       :id-usuario="dadosProntuario.id"  :share-data="this.shareDataUsuario"/>
             <AppFormDadosClinicos :id-usuario="dadosProntuario.id"  :share-data="this.shareDataClinicos"/>
             <!-- <AppFormEndereco      :id-usuario="dadosProntuario.id"  :share-data="this.shareDataEndereco"/> -->
-            <v-btn
-              style="width:10px"
-              color="secondary"
-              size="large" 
-              append-icon="mdi-database-arrow-up"
-              block
-              @click="cadastrar()"
-            >
-            Cadastrar Paciente
-          </v-btn>
+             
+            <v-row class="mt-5">
+              <v-col cols="12" md="4">
+              </v-col>
+
+              <v-col cols="12" md="4">
+                <v-btn
+                    style="width:10px"
+                    color="secondary"
+                    size="large" 
+                    append-icon="mdi-database-arrow-up"
+                    block
+                    @click="cadastrar()" >
+                  Cadastrar Paciente
+                </v-btn>
+              </v-col>
+
+              <v-col cols="12" md="4">
+              </v-col>
+            </v-row>
+            
         </v-tabs-window-item>
 
-
-        <v-tabs-window-item value="tab-consultar-pacientes">
-            Consultar Paciente
-            <MyPacientesServerTable/>
-
-        </v-tabs-window-item>
+ 
       </v-tabs-window>
     </v-card-text>
   </v-card>
@@ -102,7 +109,6 @@
   
   <script>
   /* eslint-disable */
-  
   import AppFormUsuario from '@/components/AppFormUsuario.vue'
   import AppFormEndereco from '@/components/AppFormEndereco.vue'
   import AppFormDadosClinicos from '@/components/AppFormDadosClinicos.vue'
@@ -187,12 +193,15 @@
         
     },
     methods:  {
-        handleClick( tabValue ) {
-          alert('Card Clicked!' + tabValue );
-          this.tab = tabValue;
-          // You can perform any actions you want here, like showing a dialog, updating data, etc.
-        }, 
-        sendDataAPI()            {
+        handleClick( tabValue )   {
+            // alert('Card Clicked!' + tabValue );
+            this.tab = tabValue;
+            // You can perform any actions you want here, like showing a dialog, updating data, etc.
+        },
+        onHistoricoClick()        {
+            this.$router.push({ path: '/historico-consultas', replace: true });
+        },
+        sendDataAPI()             {
             /**** console.log( "this.shareDataClinicos?? " + this.shareDataClinicos );
             console.log('Dados Gerais OK? ' + JSON.stringify( this.dadosProntuario ) );
             var nomeExistenteERROR = true;
@@ -204,14 +213,17 @@
             if ( !this.formsValidos[0] || !this.formsValidos[1] )
                   return;
 
-            // alert( "TIPOS?!? " + this.DADOS_USUARIO.tipo + " || " + this.DADOS_USUARIO.id );
+            alert( "TIPOS?!? " + this.DADOS_USUARIO.tipo + " || " + this.DADOS_USUARIO.id );
 
             /** Caso o tipo de usuario logado seja um profissional, definir o link com o cliente pelo seu ID. */      
-            if ( this.DADOS_USUARIO.tipo == "medico" ) {
+            if ( this.DADOS_USUARIO.tipo == "medico" )    {
                  this.dadosProntuario.dadosUsuario.meuMedicoId1 = this.DADOS_USUARIO.id;
             } 
             if ( this.DADOS_USUARIO.tipo == "psicologo" ) {
                  this.dadosProntuario.dadosUsuario.meuPsicologoId1 = this.DADOS_USUARIO.id;
+            }
+            if ( this.DADOS_USUARIO.tipo == null ) {
+                 this.dadosProntuario.dadosUsuario.meuMedicoId1 = this.DADOS_USUARIO.id;
             }
 
             this.prontuario.setDadosProntuario( this.dadosProntuario.dadosUsuario , this.dadosProntuario.dadosClinicos );
@@ -238,7 +250,6 @@
                       * A partir da segunda tentativa, esses campos que deveriam ser arrays, estão como strings.
                       * Para mitigar esse problema, antes de enviar os dados, preciso chegar se trata-se de uma string 
                       * (segunda tentativa em diante). */ 
-
                       this.$bus.emit('busAjustarComboboxes', true );
                  }
 
@@ -254,8 +265,6 @@
              * Lá é disparado  emit com os dados preenchidos, que são capturados aqui no mount() */
              this.shareDataClinicos = true;
              this.shareDataUsuario  = true; 
-             
-
              
              setTimeout( this.sendDataAPI, 50 );
         }

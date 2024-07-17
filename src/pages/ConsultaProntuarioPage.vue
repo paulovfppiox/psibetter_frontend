@@ -185,6 +185,7 @@ export default
                 if ( response.code == 0 )      
                 {
                      this.$bus.emit('showModal', { message: response.message, msgType: "success"} );
+                     this.$bus.emit('busAjustarComboboxes', true ); 
                 } else {
                       this.$bus.emit('showModal', { message: response.message, msgType: "warning"} );
 
@@ -195,7 +196,7 @@ export default
                       * A partir da segunda tentativa, esses campos que deveriam ser arrays, estão como strings.
                       * Para mitigar esse problema, antes de enviar os dados, preciso chegar se trata-se de uma string 
                       * (segunda tentativa em diante). */
-                      this.$bus.emit('busAjustarComboboxes', true );
+                      this.$bus.emit('busAjustarComboboxes', true ); 
                  }
 
             }).catch(error => {

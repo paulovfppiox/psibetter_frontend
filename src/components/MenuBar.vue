@@ -1,7 +1,10 @@
 <template>
 
     <!-- DADOS_USUARIO {{ JSON.stringify(DADOS_USUARIO) }}
-    NOME_USUARIO_PROFISSIONAL {{ JSON.stringify( NOME_USUARIO_PROFISSIONAL )  }} -->
+    NOME_USUARIO_PROFISSIONAL {{ JSON.stringify( NOME_USUARIO_PROFISSIONAL )  }} 
+    rail {{ rail }}
+    drawer {{ drawer }}-->
+
 
     <v-navigation-drawer
         style="background-color: lightgray;"
@@ -27,29 +30,71 @@
         </v-list-item>
 
         <v-divider></v-divider>
+ 
+        <v-list class="fonte-menor" density="compact" nav> 
+          <!-- <v-tooltip v-model="showTooltip[0]" text="Home"> -->
+            <v-tooltip text="Home">
+            <template v-slot:activator="{ props }">
+                <v-list-item 
+                  
+                  v-bind="props"
+                  prepend-icon="mdi-home-city" 
+                  title="Home"
+                  to="/home" value="home" 
+                  @click.stop="rail = !rail"> 
+              </v-list-item>
+              <!-- @mouseover="this.showTooltip[0] = rail" > -->
+            </template>
+          </v-tooltip>
 
-        <v-list density="compact" nav>
-          <v-list-item prepend-icon="mdi-home-city" value="home" 
-              title="Home"
-              to="/home"
-              @click.stop="rail = !rail"></v-list-item>
+           <!-- <v-tooltip v-model="showTooltip[1]" text="Meus Pacientes">-->
+            <v-tooltip text="Meus Pacientes">
+              <template v-slot:activator="{ props }">
+                <v-list-item 
+                    v-bind="props"
+                    prepend-icon="mdi-account-group" 
+                    title="Meus Pacientes" 
+                    to="/meus-pacientes" value="users"
+                    @click.stop="rail = !rail" >
+                 </v-list-item>  
+              </template>
+          </v-tooltip>
 
-          <v-list-item prepend-icon="mdi-calendar-month" value="account" 
-              title="Agenda" 
-              to="/agenda"
-              @click.stop="rail = !rail"></v-list-item>
-
-          <v-list-item prepend-icon="mdi-account-group" 
-              title="Meus Pacientes" 
-              to="/meus-pacientes" value="users"
-              @click.stop="rail = !rail"></v-list-item>
+          
+          <!-- <v-tooltip v-model="showTooltip[2]" text="Agenda">-->
+            <v-tooltip text="Agenda">
+              <template v-slot:activator="{ props }">
+                <v-list-item 
+                    v-bind="props"
+                    prepend-icon="mdi-calendar-month" 
+                    value="account" 
+                    title="Agenda" 
+                    to="/agenda"
+                    @click.stop="rail = !rail" >
+                 </v-list-item>
+                </template>
+          </v-tooltip>
+ 
+         <!--  <v-tooltip v-model="this.showTooltip[3]" text="Histórico de Consultas"> -->
+          <v-tooltip text="Histórico de Consultas"> 
+            <template v-slot:activator="{ props }">
+                <v-list-item 
+                  v-bind="props"
+                  prepend-icon="mdi-chart-timeline-variant" 
+                  value="account" 
+                  title="Histórico de Consultas" 
+                  to="/historico-consultas"
+                  @click.stop="rail = !rail" >
+                </v-list-item>
+             </template>
+          </v-tooltip>
 
           <v-list-item prepend-icon="mdi-file-document-edit" 
-              title="Receituário"  
-              ></v-list-item>   
+              title="Receituário" @click="showMsg">
+            </v-list-item>   
     
           <v-list-item prepend-icon="mdi-currency-usd" 
-              title="Financeiro" 
+              title="Financeiro"  @click="showMsg"
               ></v-list-item>        
         </v-list>
       </v-navigation-drawer>
@@ -57,7 +102,8 @@
       <!-- drawer {{ drawer }}
       rail {{ rail }} -->
 
-    <v-app-bar  style="background-color: lightgreen;">
+    <!-- <v-app-bar  style="background-color: lightgreen;"> -->
+    <v-app-bar  style="background-color: #77e356;">
       <v-app-bar-nav-icon @click="this.drawer = !this.drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title style="text-align: left;"> Psibetter® </v-app-bar-title>
@@ -83,15 +129,23 @@
   export default {
     data: () => ({ 
       drawer: true, /** Barra superior */
-      rail: true   /** Menu lateral */
+      rail: true,   /** Menu lateral */
+      /* showTooltip: [],*/ 
     }),
     created()    {
+      
     },
     methods:        {
       logoutClick()         {
           
           var isAutenticado = false;
           this.$store.commit( 'setIsUsuAutenticado', isAutenticado );
+      },
+      showMsg()     {
+          this.$bus.emit('showModal', { message: "Área em construção", msgType: "warning"} );
+      },
+      handleMouseOver() {
+          alert("** OLÁ!!! ");
       }
     },
     computed:               {  
@@ -114,3 +168,11 @@
     }
   }
 </script>
+
+
+<style>
+  .fonte-menor {
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-size: 15px;
+  }
+</style>

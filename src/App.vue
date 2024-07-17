@@ -1,15 +1,13 @@
 <template>
  
   
-  <v-app id="inspire" style="background-color:lightgreen"> 
-  <!-- <v-app id="inspire" class="app-background" style="background-color:lightgreen">
-    overlayOn {{ overlayOn }}
+   <v-app id="inspire" style="background-color:#b0ff91">
+   <!-- <v-app id="inspire" class="app-background" style="background-color:lightgreen"> -->
+   <!--  overlayOn {{ overlayOn }}
     loadingOn {{ loadingOn }} -->
     
-     
-    <!-- <MyLoadingOverlay :loading-on="loadingOn"   />  
-    <MyLoadingOverlay :overlay-on="true" :loading-on="true"  :loading-time="500" /> 
-    -->
+    <!-- <MyLoadingOverlay :loading-on="loadingOn" />  
+    <MyLoadingOverlay :overlay-on="true" :loading-on="true"  :loading-time="500" /> -->
     <MyModal id="myModal" 
            :message="appModalMessage"
            :visible="appModalIsVisible" 
@@ -143,7 +141,7 @@ export default {
 </script> 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -151,13 +149,13 @@ export default {
 }
 
 .app-background {
-  position: fixed;
+  /*position: fixed;*/
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   /* background-image: url(https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg); */
-  background-image: url("@/assets/img/psicologia2.png");
+  background-image: url("@/assets/img/fundo.png");
   background-size: cover;
   background-position: center center;
   z-index: -1; /* Place the background behind other content */

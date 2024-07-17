@@ -7,12 +7,20 @@ const store = new Vuex.Store( {
     user:                {
         id: null,
         nome:null,
-        email: null, 
+        email: null,
+        genero: null,
         senha: null,
         tipo: null,
         crm_crp: null,
         uf: null,
         celular: null,
+        telefone: null,
+        municipio: null,
+        anoConclusao: null, 
+        curso: null, 
+        valorConsulta: null, 
+        especialidade: null, 
+        instituicao: null,
         dataRegistro: null
     },
     meusPacientes: []

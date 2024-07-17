@@ -2,11 +2,14 @@
 /* eslint-disable */
 
 import axios from 'axios';
+import { ENDPOINT_URL } from '@/models/modelGlobalSettings.js';
 
 export default class UsuarioModel {
   constructor() { 
      //alert("Criei o UserModel!! ");
      this.operacao = "cadastrar";
+     // this.ENDPOINT_URL = "http://184.72.238.232/psibetter/psibetter_backend/services-api.php";
+     this.ENDPOINT_URL = ENDPOINT_URL;
   }
 
   async novoUsuarioAPI( userData )  {
@@ -20,7 +23,7 @@ export default class UsuarioModel {
         };
         // alert( "URL: " + this.$SERVICES_ENDPOINT_URL );
         console.log( "- UsuModel ||| Send Data >> " +  JSON.stringify( sendData ) );
-        const response = await axios.post( "http://localhost/psibetter/services-api.php", sendData );
+        const response = await axios.post( this.ENDPOINT_URL, sendData );
         console.log(" CADASTRANDO USER?? " + JSON.stringify( response ) );
         return response.data;
   }

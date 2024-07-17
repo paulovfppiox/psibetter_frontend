@@ -8,34 +8,20 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
     <v-dialog v-model="modalTermosUso" max-width="500px">
       <v-card>
         <v-card-title class="headline">
-          Modal Title
+          Termos de Uso Psibetter
         </v-card-title>
         <v-card-text>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec semper justo. Integer euismod magna id libero pulvinar, vitae rhoncus justo pulvinar.</p>
+          <p> Ao utilizar nosso sistema Psibetter, você concorda com os seguintes termos:</p>
+          <ul>
+              <li> Os dados pessoais dos pacientes são coletados e utilizados exclusivamente para fins de gerenciamento e assistência médica.</li>
+              <li> Todos os dados são armazenados de forma segura e criptografada, conforme exigido pela Lei Geral de Proteção de Dados (LGPD).</li>
+              <li> O acesso aos dados é restrito a profissionais de saúde autorizados e é estritamente controlado.</li>
+              <li> O consentimento do paciente é requerido para a coleta e processamento de dados pessoais, podendo ser revogado a qualquer momento.</li>
+              <li> Os pacientes têm direito de acessar, corrigir, atualizar e solicitar a exclusão de seus dados pessoais.</li>
+              <li> Não realizamos transferência de dados pessoais para terceiros sem consentimento prévio, exceto nos casos permitidos por lei.</li>
+              <li> Comprometemo-nos a cumprir integralmente as normas da LGPD e outras regulamentações aplicáveis.</li>
+              <li> Para dúvidas ou informações adicionais sobre nossa política de privacidade, entre em contato conosco.</li>
+          </ul>    
           <v-checkbox
              v-model="concordoTermosDeUso"
              label="Li e concordo com os Termos de Uso do Psibetter"
@@ -74,6 +60,7 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
               label="Nome completo."
               variant="outlined"
               density="comfortable"
+              bg-color="white"
               :error="this.nomeError"
               required
             ></v-text-field>
@@ -88,6 +75,7 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
                 placeholder="Informe sua senha"
                 prepend-inner-icon="mdi-account-box"
                 variant="outlined"
+                bg-color="white"
                 required 
             ></v-autocomplete>
             
@@ -104,6 +92,7 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
               prepend-inner-icon="mdi-card-account-details"
               variant="outlined"
               density="comfortable"
+              bg-color="white"
               required
             ></v-text-field>
 
@@ -119,6 +108,7 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
               variant="outlined"
               density="comfortable"
               :error="emailError"
+              bg-color="white"
               required
             ></v-text-field>
 
@@ -134,6 +124,7 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
               prepend-inner-icon="mdi-lock"
               variant="outlined"
               @click:append-inner="senhaVisivel = !senhaVisivel"
+              bg-color="white"
               required
             ></v-text-field>
 
@@ -149,6 +140,7 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
               prepend-inner-icon="mdi-lock"
               variant="outlined"
               @click:append-inner="senhaVisivel = !senhaVisivel"
+              bg-color="white"
               required
             ></v-text-field>
  
@@ -294,7 +286,8 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
                       if ( data.code == '99' )      {
                            // this.$bus.emit('showModal', data.message ); 
                            this.$bus.emit('showModal', { message: data.message , msgType: "warning"} );
-
+                           this.dadosUsuario.senha = '';
+                           this.senhaConfirma = '';
 
                       }  else  {
                            this.$bus.emit('showModal', { message: data.message , msgType: "success"} );

@@ -58,7 +58,7 @@
         variant="tonal"
       >
         <v-card-text class="text-medium-emphasis text-caption">
-          Warning: After 3 consecutive failed login attempts, you account will be temporarily locked for three hours. 
+          Psibetter te ajuda a organizar todos atendimentos, intervenções e agenda no mesmo lugar!
         </v-card-text>
       </v-card>
 
@@ -105,7 +105,7 @@ const TAM_MINIMO_SENHA = 10;
     data: () => ({
       selectedTime: null,
 
-      visible: true,
+      visible: false,
       email: '',
       emailRules: [
         v => !!v || 'Nome é obrigatório',
@@ -187,17 +187,18 @@ const TAM_MINIMO_SENHA = 10;
                             var dadosUser = responseData.data;
                             console.log("-- Dados User? " + JSON.stringify( dadosUser ));
 
-                            const { id, nome, email, senha, tipo, crm_crp, uf,  celular, dataRegistro } = responseData.data;
-                            const dadosUsuario = { id, nome, email, senha, tipo, crm_crp, uf, celular, dataRegistro };
+                            /*const { id, nome, email, senha, tipo, crm_crp, uf,  celular, dataRegistro, genero, telefone, anoConclusao, curso, valorConsulta, especialidade, instituicao } = responseData.data;
+                            const dadosUsuario = { id, nome, email, senha, tipo, crm_crp, uf, celular, dataRegistro, genero, telefone, anoConclusao, curso, valorConsulta, especialidade, instituicao};*/
+                            
                             // alert( JSON.stringify( dadosUsuario ) );
-                            this.$store.commit( 'setUser', dadosUsuario );
+                            this.$store.commit( 'setUser', dadosUser );
 
                             if ( this.senha == senhaBD )  {
                                  var isAutenticado = true;
                                  this.$store.commit( 'setIsUsuAutenticado', isAutenticado );
                                  this.$router.push({ path: '/home', replace:true  });
                             } else {
-                                this.$bus.emit('showModal', { message: "kkk Email ou senha de usuário inválido.", msgType: "warning"} );
+                                this.$bus.emit('showModal', { message: "Email ou senha de usuário inválido.", msgType: "warning"} );
                             }
                         }
                 })

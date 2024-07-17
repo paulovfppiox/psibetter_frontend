@@ -37,5 +37,20 @@ export default class MinhaConta    {
     }
   }
 
+
+  async atualizarMinhaConta( dadosUsuario , dadosProfissionais ) 
+  {
+    console.log( "Modelo ?!?!" + JSON.stringify( this.minhaContaModel ));
+    try {
+         const response = await this.minhaContaModel.atualizarMinhaContaAPI( dadosUsuario , dadosProfissionais );
+         // alert( "Minha Conta Controller || resp ? " + JSON.stringify( response ) ); 
+
+         return response;
+    }  catch (error)  {
+       console.error('Error creating user:', error);
+       throw error;
+    }
+  }
+
   // Add more methods as needed
 }

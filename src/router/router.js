@@ -8,6 +8,8 @@ import NovaSenhaPage from '@/pages/NovaSenhaPage.vue'
 import MinhaContaPage from '@/pages/MinhaContaPage.vue'
 import AgendaPage from '@/pages/AgendaPage.vue'
 import ConsultaProntuarioPage from '@/pages/ConsultaProntuarioPage.vue'
+import FicharioConsultasPage from '@/pages/FicharioConsultasPage.vue'
+import HistoricoConsultasPage from '@/pages/HistoricoConsultasPage.vue'
 
 const routes = [
     { 
@@ -50,6 +52,16 @@ const routes = [
       path: '/consulta-prontuario', 
       name: 'consulta-prontuario',
       component: ConsultaProntuarioPage 
+    },
+    { 
+      path: '/fichario-consultas', 
+      name: 'fichario-consultas',
+      component: FicharioConsultasPage
+    },
+    { 
+      path: '/historico-consultas', 
+      name: 'historico-consultas',
+      component: HistoricoConsultasPage
     },
 ]
 

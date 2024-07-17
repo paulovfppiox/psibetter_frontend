@@ -1,6 +1,13 @@
 <template> 
   <div style="width:90%; margin-left:5%; margin-right:5%" >
-    <v-text-field v-model="search" label="Consultar Paciente" placeholder="Insira um valor para buscar paciente..." outlined></v-text-field>
+    <v-text-field 
+        v-model="search" 
+        bg-color="white"
+        label="Consultar Paciente" 
+        placeholder="Insira um valor para buscar paciente..." 
+        outlined>
+    </v-text-field>
+
     <v-data-table-virtual
       :headers="headers"
       :items="pacientesData"
@@ -11,9 +18,6 @@
       :search="search"
       select-strategy="single"
       @click:row="handleRowClick">
-
-     
-
   </v-data-table-virtual>
   </div>
   
@@ -28,7 +32,7 @@
 <script>
 /** #########################  TO-DO: TEMPORÁRIA ############################333 **/
 /** #########################  TO-DO: TEMPORÁRIA ############################333 **/
-import axios from 'axios' ;
+import axios from 'axios';
 
 /* eslint-disable */ 
 export default      {    
@@ -105,18 +109,18 @@ export default      {
                      "meuMedicoId1": this.DADOS_USUARIO.id ,
                   }
               }
-        };
+          };
 
         // var senha = this.cifraSenha( this.formPrimeiroAcesso.senha );
-        console.log('-SEND DATA AQUIII == ' + JSON.stringify(  sendData ) );
+        console.log('-SEND DATA AQUIII || Buscando Pacientes na Tabela == ' + JSON.stringify(  sendData ) );
 
         // ------------ axios.post( this.$SERVICES_ENDPOINT_URL , sendData ) ------------ 
         axios.post( this.$SERVICES_ENDPOINT_URL , sendData )
              .then( response => {
-                      console.log('-Response DATA == ' + JSON.stringify( response.data ) );
+                      // console.log('-Response DATA == ' + JSON.stringify( response.data ) );
                       var responseData = response.data;
                       this.pacientesData = responseData.data;
-                      alert("DADOS TABLE?!? " + JSON.stringify( responseData.data ));
+                      // alert("DADOS TABLE?!? " + JSON.stringify( responseData.data ));
                       this.$store.commit( 'setMeusPacientes', this.pacientesData );
 
               })

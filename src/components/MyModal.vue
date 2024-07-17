@@ -99,7 +99,7 @@
 
           switch( newValue )  {
               case 'warning':
-                    alert("warning!!");
+                    // alert("warning!!");
                     this.titulo = "Atenção";
                     this.icone = 'mdi-alert';
                     this.cor = "orange";
@@ -134,6 +134,15 @@
   </script>
 
 <style>
+.v-dialog--active {
+  position: fixed; /* Ensures it stays in a fixed position relative to the viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999999; /* Adjust the z-index as needed, ensure it's higher than other elements */
+}
+
 .titulo-success {
   color: rgb(3, 134, 3);
   font-size:18px;

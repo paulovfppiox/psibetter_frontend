@@ -3,7 +3,7 @@
     <v-container style="background-color: #DCEDC8" >
    
     <div class="titulo-form-container">  
-       <label><b>  Dados Gerais do Paciente  </b></label>
+       <label style="font-size: 15px;">  Dados Gerais do Paciente  </label>
        <MyChecklistIcon v-if="formValido"/>
     </div>
 
@@ -48,10 +48,24 @@
                   :readonly="formReadonly"
                   required 
               ></v-autocomplete>
-            </v-col>
+            </v-col> 
 
             <v-col cols="12" md="4">
-                <MyDataInput label="Data de nascimento*" :value="dadosUsuario.dataNascimento" />
+                <!-- <MyDataInput label="Data de nascimento*" :value="dadosUsuario.idade" /> -->
+                <v-text-field
+                  v-model="dadosUsuario.idade"
+                  :rules="idadeRules"
+                  prepend-inner-icon="mdi-history"
+                  hint="Informe idade"
+                  type='number'
+                  max-width="400px"
+                  :counter="3"
+                  label="Idade*"
+                  :bg-color="camposBgColor"
+                  variant="outlined"
+                  density="comfortable"
+                  :readonly="formReadonly"
+              ></v-text-field>
             </v-col>
           </v-row>
 
@@ -273,7 +287,7 @@ export default {
           //dadosUsuario: usuario.getDadosUsuario(),
           //usuario,
           dadosUsuario: {
-            dataNascimento: "",
+            idade: "",
             nome: '',
             genero: '',
             celular: null,
@@ -307,6 +321,12 @@ export default {
             value => {
               if (value) return true
               return 'Celular é obrigatório.'
+            },
+          ],
+          idadeRules: [
+            value => {
+              if (value) return true
+              return 'Idade é obrigatório.'
             },
           ],
           telefoneRules: [
@@ -430,7 +450,7 @@ export default {
         if ( this.$DEBUG_ON )       {
             if ( event.key == "=" )   {
                  
-                this.dadosUsuario.dataNascimento = "1987-01-01";
+                this.dadosUsuario.idade = "1987-01-01";
                 this.dadosUsuario.nome = 'Jose Bebug ' + (Math.random() * (10 - 0) + 0).toFixed(4);
                 this.dadosUsuario.genero = 'Masculino';
                 this.dadosUsuario.celular = 996612212;
@@ -458,8 +478,9 @@ export default {
   }
 
   .titulo-form-container  label {
-    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
     margin-right: 10px; /* Adjust spacing between elements */
+    font-weight: bold;
   }
  </style>
  

@@ -3,7 +3,7 @@
   <v-container style="background-color: #DCEDC8" >
     
     <div class="titulo-form-container">  
-       <label><b>  Dados Clínicos  </b></label>
+      <label style="font-size: 15px;">  Dados Clínicos </label>´
        <MyChecklistIcon v-if="formValido"/>
     </div>
     
@@ -378,7 +378,7 @@ import axios from 'axios';
       ],
       tentativasRules: [
           value => {
-            if (value) return true
+            if (value || (value == 0) ) return true
             return 'Preencha a tentativas de suicídio.'
           },
       ],

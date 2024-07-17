@@ -1,21 +1,38 @@
 <template>
 
   <!-- DADOS?!?! {{ this.DADOS_USUARIO }} -->
-    <div style="background-color: lightgray;">
+  <v-row>
+      teste
+  </v-row>
+  <v-row>
+    teste 22
+  </v-row>
+
+  <div class='demo-app'>
+    <div class='demo-app-sidebar'>
+      <div class='demo-app-sidebar-section'>
         <h2>Instruções de Uso</h2>
-        <br/>
-        <p> Para adicionar uma nova consulta, basta selecionar a data desejada. </p>
-        <p> Para deletar uma consulta, basta clicar sobre ela. </p>
-      
+        <ul>
+          <li> Para adicionar uma nova consulta, basta selecionar a data desejada. </li>
+          <li> Para deletar uma consulta, basta clicar sobre ela. </li>
+        </ul>
+      </div>
+      <div class='demo-app-sidebar-section'>
         <label>
           <input type='checkbox' :checked='calendarOptions.weekends' @change='handleWeekendsToggle'/>
               Visualizar finais de semana
         </label>
-        <br>
-        <br>
+      </div>
+      <div class='demo-app-sidebar-section'>
         <h2> N° total de consultas agendadas: {{ currentEvents.length }} </h2>
+        <!-- <ul>
+          <li v-for='event in currentEvents' :key='event.id'>
+            <b>{{ event.startStr }}</b>
+            <i>{{ event.title }}</i>
+          </li>
+        </ul> -->
+      </div>
     </div>
-
 
     <!-- MENUS_PACIENTES_NOMES {{ JSON.stringify( MENUS_PACIENTES_NOMES ) }} 
     tituloNovoEvento {{ tituloNovoEvento }}    <br>
@@ -47,14 +64,8 @@
           <input type="time" id="appt" name="appt" v-model="this.horaFimNovoEvento" style="background-color: white; width: 100px; height: 50px; margin-left: 10px">
 
         </v-card-text>
-        <v-checkbox
-          style="font-size: 10px; margin-top: 20px; color:black"
-          v-model="agendarTrimestre"
-          label="Agendar Trimestre?" 
-          value="1"
-        ></v-checkbox>
         <v-card-actions>
-          <v-btn  color="primary" @click="this.addEventos()"> Adicionar Evento </v-btn>
+          <v-btn  color="primary" @click="this.addEvento()"> Adicionar Evento </v-btn>
         </v-card-actions>
         </v-card>
     </v-dialog>
@@ -64,7 +75,7 @@
     <!-- calendarLocale {{  calendarOptions.calendarLocale }}
     :locale="calendarOptions.calendarLocale"
     -->
-    <div class='demo-app-main' style="background-color: white"> 
+    <div class='demo-app-main'> 
       
       <div class="visao-label">
            Perspectiva
@@ -81,6 +92,7 @@
         </template>
       </FullCalendar>
     </div>
+  </div>
 </template>
 
 <script>
@@ -116,7 +128,7 @@ export default defineComponent({
       modalNovoEventoOn: false,
       dadosNovoEvento: null,
       modoVisaoAtual: null,   /** Detectado em onViewChange() */
-      agendarTrimestre: false,
+
       cores: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
       calendarOptions: {
         // calendarLocale: ptLocale,
@@ -346,97 +358,7 @@ export default defineComponent({
       this.addEventoAPI( evento );
       this.modalNovoEventoOn = false;
     },
-    /** Dada um parâmetro de data inicial no formato dateIni = '2024-07-18',
-     * Gera um vetor com as 12 próximas datas com intervalo de 7 dias entre cada uma.
-     * Função usada para agendar um trimestre para um paciente. **/
-    gerarDatasTrimestre( dateIni )          {
-        let dates = [];
-        let currentDate = new Date(dateIni); // Convert input date string to Date object
-        dates.push(currentDate.toISOString().slice(0, 10)); // Push initial date to array
-
-        // Generate 11 more dates, each 7 days apart
-        for (let i = 1; i < 12; i++) {
-            currentDate.setDate(currentDate.getDate() + 7); // Add 7 days to current date
-            dates.push(currentDate.toISOString().slice(0, 10)); // Push formatted date string to array
-        }
-        // alert("DATAS GERADAS?!" + JSON.stringify(dates));
-        return dates;
-    },
-    addEventos()              {
-      
-        alert( this.agendarTrimestre );
-        if ( this.agendarTrimestre )    {
-             var datas = this.gerarDatasTrimestre( this.dadosNovoEvento.startStr );
-             for( var i=0; i<datas.length; i++ )   {
-                  this.dadosNovoEvento.startStr = datas[ i ];
-                  this.addEventoDia();
-             }
-        } else {
-          this.addEventoDia();
-        }
-    },
-    addEventoDia()      {
-      if ( this.tituloNovoEvento == null )  {
-           alert("Selecione o titulo do novo evento.");
-           return;
-      }
-      console.log("** Adicionando novo evento: " + JSON.stringify( this.dadosNovoEvento ));
-      // let calendarApi = this.dadosNovoEvento.view.calendar;
-      const calendarApi = this.$refs.calendarRef.getApi();
-      calendarApi.unselect() // clear date selection
-      
-      alert("DATA START? " + this.dadosNovoEvento.startStr + " || " + this.horaIniNovoEvento + " || " + this.horaFimNovoEvento );
-
-      /** DATA INICIAL */
-      var dateString = this.dadosNovoEvento.startStr;
-      var initialTime = this.horaIniNovoEvento;
-      var datetimeString = `${dateString}T${initialTime}:00`;
-      // Initialize a Date object with the combined datetime string
-      const dateTimeIniObject = new Date(datetimeString);
-
-      /** DATA FINAL */
-      dateString = this.dadosNovoEvento.startStr;
-      var finalTime = this.horaFimNovoEvento;
-      datetimeString = `${dateString}T${finalTime}:00`;
-      // Initialize a Date object with the combined datetime string
-      const dateTimeFimObject = new Date(datetimeString);
-
-      console.log("DATA INICIAL:  " + dateTimeIniObject );
-      console.log("DATA FINAL:  " + dateTimeFimObject );
-
-      //*********************** COMPARAR HORÁRIOs *************************** */  
-      var timeOk = this.isDataTimeFimMaior( dateTimeIniObject, dateTimeFimObject);
-      if ( !timeOk )  {
-            this.$bus.emit('showModal', { message: "Horário final deve ser maior que o inicial.", msgType: "warning"} );
-            return;
-      }
-      //************************************************** */  
-
-      let title = this.tituloNovoEvento;
-      if (title) {
-          calendarApi.addEvent({
-              id: createEventId(),
-              title,
-              start: dateTimeIniObject,
-              end: dateTimeFimObject,
-              color: this.cores[this.rnd(0, this.cores.length - 1)],
-              allDay: false
-          })
-      }
-
-      console.log( "DATA INI = " + dateTimeIniObject + " || DATA FIM = " + dateTimeFimObject);
-
-      /** Monta evento para back-end, e envia via API */
-      const evento = {
-          nomePaciente: this.tituloNovoEvento, 
-          dataHoraInicio: dateTimeIniObject,
-          dataHoraFim: dateTimeFimObject,
-          profissionalId: this.DADOS_USUARIO.id
-      }
-      this.addEventoAPI( evento );
-      this.modalNovoEventoOn = false;
-    },
-    addEventoOLD()                  {
+    addEvento()                  {
       if ( this.tituloNovoEvento == null )  {
            alert("Selecione o titulo do novo evento.");
            return;
@@ -488,7 +410,7 @@ export default defineComponent({
       console.log( "DATA INI = " + dateTimeIniObject + " || DATA FIM = " + dateTimeFimObject);
 
       /** Monta evento para back-end, e envia via API */
-      const evento = {
+      var evento = {
           nomePaciente: this.tituloNovoEvento, 
           dataHoraInicio: dateTimeIniObject,
           dataHoraFim: dateTimeFimObject,

@@ -69,11 +69,11 @@
         <h2> Psibetter </h2>
         <p> Redefina sua senha e confirme-a abaixo: </p>
         <div class="password-container">
-            <input type="password" id="password1" placeholder="Digite sua senha">
+            <input type="password" id="password1" placeholder="Digite sua nova senha">
             <span class="toggle-password" onclick="togglePassword('password1')">👁️</span>
         </div>
         <div class="password-container">
-            <input type="password" id="password2" placeholder="Confirme sua senha">
+            <input type="password" id="password2" placeholder="Confirme sua nova senha">
             <span class="toggle-password" onclick="togglePassword('password2')">👁️</span>
         </div>
         <div>
@@ -100,6 +100,7 @@
         // Get the URL parameters
         const data = new URLSearchParams( window.location.search ).get('data');
         const email = data;
+        alert("EMAIL: " + email );
 
         function togglePassword(fieldId) {
             const field = document.getElementById(fieldId);

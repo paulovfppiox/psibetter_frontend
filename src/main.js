@@ -47,7 +47,12 @@ const app = createApp(App)
 
 app.config.globalProperties.$APP_NAME = 'Psibetter®';
 app.config.globalProperties.$IS_MOBILE_APP = ( document.documentElement.clientWidth < 620 ) ? true : false;	
-app.config.globalProperties.$SERVICES_ENDPOINT_URL = "http://localhost/psibetter/services-api.php";
+// app.config.globalProperties.$SERVICES_ENDPOINT_URL = "http://localhost/psibetter_backend/services-api.php";
+
+
+import { ENDPOINT_URL } from '@/models/modelGlobalSettings.js';
+app.config.globalProperties.$SERVICES_ENDPOINT_URL = ENDPOINT_URL; // "http://184.72.238.232/psibetter/psibetter_backend/services-api.php";
+
 app.config.globalProperties.$DEBUG_ON   = true;
 
 
