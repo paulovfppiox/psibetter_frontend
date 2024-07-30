@@ -205,7 +205,7 @@
           };
 
           // var senha = this.cifraSenha( this.formPrimeiroAcesso.senha );
-          console.log('-SEND DATA AQUIII == ' + JSON.stringify(  sendData ) );
+          console.log('-SEND DATA HomePage == ' + JSON.stringify(  sendData ) );
 
           // ------------ axios.post( this.$SERVICES_ENDPOINT_URL , sendData ) ------------ 
           axios.post( this.$SERVICES_ENDPOINT_URL , sendData )

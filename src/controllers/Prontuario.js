@@ -29,7 +29,7 @@ export default class Prontuario    {
     console.log( "Modelo ?!?!" + JSON.stringify( this.prontuarioModel ));
     try {
          const response = await this.prontuarioModel.cadastrarProntuarioAPI( dadosUsuario , dadosClinicos );
-         alert( "Prontuario Controller || resp ? " + JSON.stringify( response ) ); 
+         // alert( "Prontuario Controller || resp ? " + JSON.stringify( response ) ); 
          return response;
     } catch (error) {
       console.error('Error creating user:', error);
@@ -39,10 +39,10 @@ export default class Prontuario    {
 
   async atualizarProntuario( dadosUsuario , dadosClinicos ) 
   {
-    console.log( "Modelo ?!?!" + JSON.stringify( this.prontuarioModel ));
+    // console.log( "Modelo ?!?!" + JSON.stringify( this.prontuarioModel ));
     try {
          const response = await this.prontuarioModel.atualizarProntuarioAPI( dadosUsuario , dadosClinicos );
-         alert( "Prontuario Atualizar || resp ? " + JSON.stringify( response ) ); 
+         // alert( "Prontuario Atualizar || resp ? " + JSON.stringify( response ) ); 
          return response;
     } catch (error) {
       console.error('Error creating user:', error);

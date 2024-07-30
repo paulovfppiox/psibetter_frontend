@@ -3,15 +3,20 @@
     <v-container style="background-color: #DCEDC8;" >
     
     <div class="titulo-form-container">  
-       <label><b>  Minha Conta  </b></label>
+
+        <h1 class="text-h5 text-lg-h5" style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
+            <b> Minha Conta </b>
+       </h1>  
+
+       <!-- <label><b>  Minha Conta  </b></label> -->
        <MyChecklistIcon v-if="formValido"/>
     </div>
 
-    formValido? {{  formValido  }} <br>
+    <!-- formValido? {{  formValido  }} <br>
 
     DADOS_USUARIO {{ JSON.stringify(DADOS_USUARIO) }}
     email {{ DADOS_USUARIO.email }}
-    senha {{ SENHA }}
+    senha {{ SENHA }} -->
 
     <v-form class="mt-5" v-model="this.formValido" style="background-color: #DCEDC8" ref="form">
 
@@ -161,7 +166,7 @@
               <span class="label"> Formação e Dados Profissionais </span>
           </v-row>
 
-          !!!!! dadosProfissionais {{ dadosMinhaConta.dadosProfissionais  }} !!!!! 
+          <!-- !!!!! dadosProfissionais {{ dadosMinhaConta.dadosProfissionais  }} !!!!! -->
           
 
             <!--- #####################################  LINHA 2  ########################################## -->
@@ -234,7 +239,8 @@
                       required 
                   ></v-autocomplete>
               </v-col>
-              abordagensPsicologia {{ JSON.stringify( abordagensPsicologia )  }}
+              
+              <!-- abordagensPsicologia {{ JSON.stringify( abordagensPsicologia )  }} -->
               <v-col cols="12" md="4"> 
               <!-- NOTA!! NOTA!! hide-details: esconde o detalhe de validação do Campo !!!!  -->
                <v-combobox
@@ -268,7 +274,7 @@
                   ></v-text-field>
               </v-col>
           </v-row>
-          profissionalExistente {{ profissionalExistente  }}
+          <!-- profissionalExistente {{ profissionalExistente  }} -->
 
           <v-row>
             <v-col cols="12" md="4">
@@ -503,7 +509,7 @@ const minhaConta = new MinhaConta();
                      this.profissionalExistente = true;
                      // this.$bus.emit('showModal', { message: responseData.message, msgType: "success"} );
                      const dados = responseData.data;
-                     alert( "Data?" + JSON.stringify( dados ) );
+                     //alert( "Data?" + JSON.stringify( dados ) );
                      this.dadosMinhaConta.dadosProfissionais.instituicao   = dados.instituicao;
                      this.dadosMinhaConta.dadosProfissionais.especialidade = dados.especialidade;
                      this.dadosMinhaConta.dadosProfissionais.anoConclusao  = dados.anoConclusao;
@@ -542,7 +548,7 @@ const minhaConta = new MinhaConta();
                     if ( responseData.code == '0' )  {  
                           // this.$bus.emit('showModal', { message: responseData.message, msgType: "success"} );
                           const dados = responseData.data;
-                          alert( "Data?" + JSON.stringify( dados ) ); 
+                          //alert( "Data?" + JSON.stringify( dados ) ); 
                           this.dadosMinhaConta.dadosUsuario.email     = dados.email;
                           this.dadosMinhaConta.dadosUsuario.telefone  = dados.telefone;
                           this.dadosMinhaConta.dadosUsuario.celular   = dados.celular;
@@ -640,9 +646,9 @@ const minhaConta = new MinhaConta();
                 this.minhaConta.setDadosMinhaConta(  this.dadosMinhaConta.dadosUsuario , this.dadosMinhaConta.dadosProfissionais );
                 this.minhaConta.atualizarMinhaConta( this.dadosMinhaConta.dadosUsuario , this.dadosMinhaConta.dadosProfissionais ).then(response => {
                      console.log('Cadastro Minha Conta Response:', response);
-                     alert( response.code + " ||| " + response.message );
-
-                     alert( JSON.stringify( this.abordagensPsicologia ) );
+                     
+                     /* alert( response.code + " ||| " + response.message );
+                     alert( JSON.stringify( this.abordagensPsicologia ) );*/
 
                      // alert( response.code + " ||| " + response.message );
                      if ( response.code == 0 )      {

@@ -1,8 +1,10 @@
 <template>
  
+   <!-- APLICAR_FUNDO_LOGIN {{ APLICAR_FUNDO_LOGIN }} -->
   
-   <v-app id="inspire" style="background-color:#b0ff91">
-   <!-- <v-app id="inspire" class="app-background" style="background-color:lightgreen"> -->
+   <!-- <v-app id="inspire" style="background-color:#b0ff91"> -->
+   <v-app id="inspire" :class="{ 'app-background': APLICAR_FUNDO_LOGIN }" style="background-color:#b0ff91">
+    
    <!--  overlayOn {{ overlayOn }}
     loadingOn {{ loadingOn }} -->
     
@@ -78,6 +80,10 @@ export default {
       {
           return this.$route.name;
       },
+      APLICAR_FUNDO_LOGIN()
+      {
+          return ( ( this.$route.name == 'login' ) || ( this.$route.name == 'registro-usuario' ) )
+      },
       IS_REGISTRAR_USUARIO()
       {
         return ( ( this.PATH_ATUAL == 'registro-usuario' ) && ( !this.USUARIO_AUTENTICADO  ) );
@@ -152,11 +158,9 @@ export default {
   /*position: fixed;*/
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  /* background-image: url(https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg); */
-  background-image: url("@/assets/img/fundo.png");
-  background-size: cover;
+  /*width: 100vw;
+  height: 100vh; */
+  background-image: url("@/assets/img/fundo-psi.jpeg");
   background-position: center center;
   z-index: -1; /* Place the background behind other content */
 }

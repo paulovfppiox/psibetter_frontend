@@ -10,6 +10,7 @@ import AgendaPage from '@/pages/AgendaPage.vue'
 import ConsultaProntuarioPage from '@/pages/ConsultaProntuarioPage.vue'
 import FicharioConsultasPage from '@/pages/FicharioConsultasPage.vue'
 import HistoricoConsultasPage from '@/pages/HistoricoConsultasPage.vue'
+import FinanceiroPage from '@/pages/FinanceiroPage.vue'
 
 const routes = [
     { 
@@ -62,6 +63,11 @@ const routes = [
       path: '/historico-consultas', 
       name: 'historico-consultas',
       component: HistoricoConsultasPage
+    },
+    { 
+      path: '/financeiro', 
+      name: 'financeiro',
+      component: FinanceiroPage
     },
 ]
 

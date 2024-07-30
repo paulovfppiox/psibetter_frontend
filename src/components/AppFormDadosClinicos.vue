@@ -286,7 +286,7 @@ import axios from 'axios';
           },
           modoEdicao( value )          {
             
-              alert( "MODO CLINICO?!? !?!?!? " + value );
+              //alert( "MODO CLINICO?!? !?!?!? " + value );
               if ( value == "LEITURA" ) {
                    this.formReadonly = true; 
                    this.camposBgColor = "grey-lighten-3"; //"#C6C6C4";
@@ -496,7 +496,7 @@ import axios from 'axios';
                  .then( response => {
                          console.log('-Response DATA == ' + JSON.stringify( response.data ) );
                          var data = response.data;
-                         alert(data.code + " || " + data.message );
+                         // alert(data.code + " || " + data.message );
 
                          var dados = data.data;
                          this.dadosClinicos.fuma = dados.fuma.toString();

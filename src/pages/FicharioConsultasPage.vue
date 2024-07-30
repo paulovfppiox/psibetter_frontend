@@ -263,7 +263,7 @@ export default {
     },
     mounted()         {
         this.$bus.on('busFormUsuarioDados', ( dadosFicharioConsulta ) => {
-            alert( '[*] Dados ?!?' + JSON.stringify( dadosFicharioConsulta ) );
+            // alert( '[*] Dados ?!?' + JSON.stringify( dadosFicharioConsulta ) );
          })
     },
     beforeMount()     {
@@ -272,7 +272,7 @@ export default {
        let storedData = localStorage.getItem('ficharioUsuarioObj');  
        if ( storedData )             {
             storedData = JSON.parse( storedData );
-            alert("Dados retornados?!?! " + JSON.stringify( storedData ) ); 
+            // alert("Dados retornados?!?! " + JSON.stringify( storedData ) ); 
             /** Carrega dados doa atual Fichário caso pré-salvos em Banco de Dados. */
             this.dadosFicharioAgenda.nomePaciente = storedData.nomePaciente;
             this.dadosFicharioAgenda.id = storedData.id;
@@ -285,9 +285,7 @@ export default {
             this.dadosFicharioAgenda.intervencoes      = storedData.intervencoes;      
             this.dadosFicharioAgenda.planoIntervencoes = storedData.planoIntervencoes;
             
-       } else {
-          alert("NOT USER");
-       }
+       }  
     },
     async mounted()         {
         

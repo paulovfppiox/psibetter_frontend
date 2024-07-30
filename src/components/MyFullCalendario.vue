@@ -96,8 +96,10 @@ import { INITIAL_EVENTS, createEventId } from '@/utils/eventUtils.js'
 // import ptLocale from '@fullcalendar/core/locales/pt-br';
 
 import Agenda from '@/controllers/Agenda.js'; 
+import Financeiro from '@/controllers/Financeiro.js';
  
- const agenda = new Agenda();
+const agenda = new Agenda();
+const financeiro = new Financeiro();
 
 export default defineComponent({
   components: {
@@ -108,6 +110,7 @@ export default defineComponent({
       
       dadosEvento: agenda.getDados(),
       agenda,
+      financeiro,
       eventosBD : [],
 
       tituloNovoEvento:null,
@@ -268,12 +271,24 @@ export default defineComponent({
 
     addEventoAPI( dadosEvento )  {
       
+        // alert("** Dados eventos: " + JSON.stringify( dadosEvento ) );
+
         // this.agenda.setDados( dadosEvento );
         this.agenda.cadastrarEvento( dadosEvento ).then(response => {
             // console.log('Cadastro Evento Response:', response);
             // alert( response.code + " ||| " + response.message );
             if ( response.code == 0 )      {
                  this.$bus.emit('showModal', { message: response.message, msgType: "success"} );
+                 
+
+                 const dataHraIni = dadosEvento.dataHoraInicio.slice(0, 19);
+                 var dadosFinanceiros = {
+                      "nome": dadosEvento.nomePaciente,
+                      "dataHoraInicio": dataHraIni
+                 };        
+                 alert( "Data? " + JSON.stringify( dadosFinanceiros ) );
+                 const resp = this.financeiro.cadastrarFinanceiro( dadosFinanceiros );
+                 alert( "REsponse? " + JSON.stringify( resp.data ) );
             }
         }).catch(error => {
           console.error('Error creating user:', error);
@@ -364,7 +379,7 @@ export default defineComponent({
     },
     addEventos()              {
       
-        alert( this.agendarTrimestre );
+        // alert( this.agendarTrimestre );
         if ( this.agendarTrimestre )    {
              var datas = this.gerarDatasTrimestre( this.dadosNovoEvento.startStr );
              for( var i=0; i<datas.length; i++ )   {
@@ -377,7 +392,8 @@ export default defineComponent({
     },
     addEventoDia()      {
       if ( this.tituloNovoEvento == null )  {
-           alert("Selecione o titulo do novo evento.");
+           // alert("Selecione o titulo do novo evento.");
+           this.$bus.emit('showModal', { message: "Selecione o titulo do novo evento.", msgType: "warning"} );
            return;
       }
       console.log("** Adicionando novo evento: " + JSON.stringify( this.dadosNovoEvento ));
@@ -385,7 +401,7 @@ export default defineComponent({
       const calendarApi = this.$refs.calendarRef.getApi();
       calendarApi.unselect() // clear date selection
       
-      alert("DATA START? " + this.dadosNovoEvento.startStr + " || " + this.horaIniNovoEvento + " || " + this.horaFimNovoEvento );
+      // alert("DATA START? " + this.dadosNovoEvento.startStr + " || " + this.horaIniNovoEvento + " || " + this.horaFimNovoEvento );
 
       /** DATA INICIAL */
       var dateString = this.dadosNovoEvento.startStr;

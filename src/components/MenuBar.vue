@@ -60,9 +60,8 @@
               </template>
           </v-tooltip>
 
-          
           <!-- <v-tooltip v-model="showTooltip[2]" text="Agenda">-->
-            <v-tooltip text="Agenda">
+            <v-tooltip v-if="!this.$IS_MOBILE_APP" text="Agenda">
               <template v-slot:activator="{ props }">
                 <v-list-item 
                     v-bind="props"
@@ -93,9 +92,20 @@
               title="Receituário" @click="showMsg">
             </v-list-item>   
     
-          <v-list-item prepend-icon="mdi-currency-usd" 
-              title="Financeiro"  @click="showMsg"
-              ></v-list-item>        
+            <v-tooltip text="Financeiro"> 
+            <template v-slot:activator="{ props }">
+                <v-list-item 
+                  v-bind="props"
+                  prepend-icon="mdi-currency-usd" 
+                  value="account" 
+                  title="Financeiro" 
+                  to="/financeiro"
+                  @click.stop="rail = !rail" >
+                </v-list-item>
+             </template>
+          </v-tooltip>
+            
+
         </v-list>
       </v-navigation-drawer>
 

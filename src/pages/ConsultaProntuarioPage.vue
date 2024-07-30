@@ -125,7 +125,7 @@ export default
            if ( storedData )             {
                 storedData = JSON.parse( storedData );
                 // console.log( "Dados retornados?!?! " + storedData );
-                alert( "-- ID user ?!?!" + storedData.id );
+                // alert( "-- ID user ?!?!" + storedData.id );
                 this.idUsuario = storedData.id;
             }
        
@@ -174,7 +174,7 @@ export default
             if ( nomeExistenteERROR ) { this.$bus.emit('showModal', msg ); }
             ****/
 
-            alert( "formsValidos ?? " + JSON.stringify( this.formsValidos ) );
+            // alert( "formsValidos ?? " + JSON.stringify( this.formsValidos ) );
             if ( !this.formsValidos[0] || !this.formsValidos[1] )
                   return;
             
@@ -242,7 +242,7 @@ export default
   },
   watch: { 
     isEdicaoOn( value ) {
-        alert("this.isEdicaoOn MUDOU!!!!" + value );
+        // alert("this.isEdicaoOn MUDOU!!!!" + value );
         if ( value )
              this.modoEdicao = "EDICAO";
         else

@@ -3,7 +3,7 @@
 <div class="margin-top-login"> 
     <v-img
       class="mx-auto my-6"
-      width="100"
+      width="150"
       :src="require('@/assets/logo.png')"
     ></v-img>
     <!-- 
@@ -84,6 +84,8 @@
   </v-card> 
  </div> 
 
+ <!-- <MySimpleUpload></MySimpleUpload>
+ <DropZoneHome></DropZoneHome> -->
 </template>
 
 <script setup> 
@@ -96,11 +98,9 @@ const TAM_MINIMO_SENHA = 10;
   /* eslint-disable */
   import axios from 'axios';
   import UtilsMixin  from '@/utils/UtilsMixin.js'; 
-  
-   export default {
+    export default           {
     mixins: [UtilsMixin],
-    components:            { 
-       
+    components:         {  
     },
     data: () => ({
       selectedTime: null,

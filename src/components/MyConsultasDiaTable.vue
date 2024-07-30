@@ -86,12 +86,12 @@
           this.agenda.consultarEventos( dataIni, dataFim, profissionalId ).
           then(response => {
             console.log('Cadastro Evento de Agenda Response:', response);
-            alert( response.code + " || " + response.message );
+            //alert( response.code + " || " + response.message );
 
             if ( response.code == 0 )   {  
                  var responseData = response.data;
                  this.consultasData = responseData;
-                 alert("DADOS TABLE?!? " + JSON.stringify( this.consultasData )); 
+                  // alert("DADOS TABLE?!? " + JSON.stringify( this.consultasData )); 
                  this.temConsultasHoje = true;
             }   else  {
                 this.temConsultasHoje = false;
@@ -107,7 +107,7 @@
         handleRowClick(item , obj ) {
           
           var msg = "OBJ ID: " + obj.index + " || " + JSON.stringify(obj.item)  + "|| Row clicked: " + item;
-          alert( msg );
+          // alert( msg );
 
           localStorage.setItem('ficharioUsuarioObj', JSON.stringify( obj.item ) );
 

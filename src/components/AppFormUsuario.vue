@@ -233,11 +233,11 @@ export default {
           },
           modoEdicao( value )          {
             
-            alert( "MODO Form Usuario?!? " + value );
+            // alert( "MODO Form Usuario?!? " + value );
             if ( value == "LEITURA" ) {
                  this.formReadonly = true; 
                  this.camposBgColor = "grey-lighten-3"; //"#C6C6C4";
-                 alert( this.formReadonly  + " || " + this.camposBgColor );
+                 // alert( this.formReadonly  + " || " + this.camposBgColor );
             }
             if ( value == "EDICAO" ) {
                  this.formReadonly = false;

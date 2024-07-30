@@ -3,16 +3,15 @@
     <v-container id="relatorioPDF" style="background-color: #DCEDC8;" >
     
     <h1 class="text-h5 text-lg-h5 mb-5 mt-5" style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
-      <b> Histório de Atendimentos  </b>
+      <b> Histório de Consultas  </b>
     </h1>
-
-    
 
     <!-- 
       formValido? {{  formValido  }} 
       DADOS_USUARIO {{ JSON.stringify(DADOS_USUARIO) }}
-    email {{ DADOS_USUARIO.email }}
-    senha {{ SENHA }} -->
+      email {{ DADOS_USUARIO.email }}
+      senha {{ SENHA }} 
+      -->
 
         <v-form class="mt-5" v-model="this.formValido" style="background-color: #DCEDC8" ref="form">
           

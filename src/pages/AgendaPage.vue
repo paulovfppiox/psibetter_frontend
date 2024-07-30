@@ -13,6 +13,7 @@
  
 import MyFullCalendario from '@/components/MyFullCalendario.vue';
 
+
 /* eslint-disable */
 export default    {
   name: 'App',

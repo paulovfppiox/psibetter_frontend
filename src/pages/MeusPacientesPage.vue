@@ -213,7 +213,7 @@
             if ( !this.formsValidos[0] || !this.formsValidos[1] )
                   return;
 
-            alert( "TIPOS?!? " + this.DADOS_USUARIO.tipo + " || " + this.DADOS_USUARIO.id );
+            // alert( "TIPOS?!? " + this.DADOS_USUARIO.tipo + " || " + this.DADOS_USUARIO.id );
 
             /** Caso o tipo de usuario logado seja um profissional, definir o link com o cliente pelo seu ID. */      
             if ( this.DADOS_USUARIO.tipo == "medico" )    {
