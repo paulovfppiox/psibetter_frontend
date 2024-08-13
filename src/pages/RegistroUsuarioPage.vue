@@ -254,7 +254,9 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
                     // this.$bus.emit('showModal', "Para registrar-se é necessário concordar com os Termos de Uso." ); 
                     this.$bus.emit('showModal', { message: "Para registrar-se é necessário concordar com os Termos de Uso." , msgType: "warning"} );
                }
-          } 
+          }  else  {
+            this.$bus.emit('showModal', { message: "Preencha todos os dados corretamente." , msgType: "warning"} );
+          }
       },
       async registrarUsuarioAPI()         {
         

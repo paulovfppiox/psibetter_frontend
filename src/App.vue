@@ -3,7 +3,7 @@
    <!-- APLICAR_FUNDO_LOGIN {{ APLICAR_FUNDO_LOGIN }} -->
   
    <!-- <v-app id="inspire" style="background-color:#b0ff91"> -->
-   <v-app id="inspire" :class="{ 'app-background': APLICAR_FUNDO_LOGIN }" style="background-color:#b0ff91">
+   <v-app id="inspire" :class="{ 'app-background': APLICAR_FUNDO_LOGIN }" style="background-color:#cdfcbb">
     
    <!--  overlayOn {{ overlayOn }}
     loadingOn {{ loadingOn }} -->
@@ -89,8 +89,7 @@ export default {
         return ( ( this.PATH_ATUAL == 'registro-usuario' ) && ( !this.USUARIO_AUTENTICADO  ) );
       }, 
   }, 
-  updated() 	                {
-     console.log("Ok updated!!");
+  updated() 	          {
   },
   created()             {
   },

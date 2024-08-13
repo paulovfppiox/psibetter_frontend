@@ -117,23 +117,23 @@ export const UtilsMixin = {
 
           // Compare the times
           if (timeInMillis1 < timeInMillis2) {
-              console.log("T1 < T2 ");
+              // console.log("T1 < T2 ");
               return true;
           } else {
-            console.log("T1 >= T2 ");
+            // console.log("T1 >= T2 ");
             return false;
           }
       },
       cifraSenha( senhaPlana ) 
       {
         var cifrada = btoa( senhaPlana );
-        console.log("Senha " + senhaPlana + ", cifrada =>> " + cifrada );
+        //console.log("Senha " + senhaPlana + ", cifrada =>> " + cifrada );
         return cifrada;
       },
       decifraSenha( senhaCifrada ) 
       {
         var senhaPlana = atob( senhaCifrada );
-        console.log("Senha cifrada " + senhaCifrada + ", plana =>> " + senhaPlana );
+        // console.log("Senha cifrada " + senhaCifrada + ", plana =>> " + senhaPlana );
         return senhaPlana;
       },
       async getDataHoraAtual( key = 'data' ) /* data, or hora */

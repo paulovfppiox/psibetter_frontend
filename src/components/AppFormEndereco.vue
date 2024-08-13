@@ -157,7 +157,7 @@
                           return 0;  
                    }        else               {
                         var dados = response.data;  
-                        alert( JSON.stringify(dados) );
+                        // alert( JSON.stringify(dados) );
                         this.municipio    = dados.localidade;
                         this.UF = dados.uf;
                    }

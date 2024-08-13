@@ -176,13 +176,27 @@
                     destino: this.email,
                     assunto: "Redefina sua senha (Psibetter) | 2023",
                     corpo: 
-                    "<b> Acesse o seguinte link para redefinição de senha </b>" +
-                    "<div style='background-color: lightgreen'>" + 
-                       "<h1>  </h1>" +
-                     "</div>",
+                    ` <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; border-radius: 10px; max-width: 600px; margin: auto;">
+                          <h2 style="color: #333;">Redefina sua Senha</h2>
+                          <p style="font-size: 16px; color: #555; line-height: 1.5;">
+                              <b>Acesse o seguinte link para redefinição de senha:</b>
+                          </p>
+                          <div style="background-color: #e0ffe0; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 20px 0;">
+                              <p style="margin: 0;">
+                                  <a href="http://paivaservices.com/psibetter/redefine-senha.html?data=${encodeURIComponent(this.email)}" target="_blank" style="color: #007bff; text-decoration: none; font-weight: bold; font-size: 18px;">
+                                      Redefinir Senha
+                                  </a>
+                              </p>
+                          </div>
+                          <p style="font-size: 14px; color: #888;">
+                              Se você não solicitou esta alteração, ignore este e-mail.
+                          </p>
+                      </div>
+                  `,
                 }; 
               // ------------ axios.post( this.$SERVICES_ENDPOINT_URL , sendData ) ------------ 
-              axios.post( 'http://localhost/psibetter/mailsender-api.php', sendData )
+              // axios.post( 'http://localhost/psibetter_backend/mailsender-api.php', sendData )
+              axios.post( 'http://184.72.238.232/psibetter/psibetter_backend/mailsender-api.php', sendData )
                     .then( response => {
                             console.log('-Response DATA == ' + JSON.stringify( response.data ) );
                             var responseData = response.data;

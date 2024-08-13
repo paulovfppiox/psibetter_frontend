@@ -7,9 +7,9 @@
       <b> Financeiro </b>
     </h1>
 
-    filtros {{ JSON.stringify( filtros ) }}
+    <!-- filtros {{ JSON.stringify( filtros ) }}
     DADOS_USUARIO {{ this.DADOS_USUARIO.id }}
-    this.$IS_MOBILE_APP {{  this.$IS_MOBILE_APP }}
+    this.$IS_MOBILE_APP {{  this.$IS_MOBILE_APP }} -->
     
 
     <v-form class="mt-5" v-model="this.formValido" style="background-color: #DCEDC8" ref="form">
@@ -56,6 +56,7 @@
 
             <v-col cols="12" md="4">
                 <v-btn
+                  class="mb-5"
                   color="secondary"
                   append-icon="mdi-database-arrow-up"
                   block
@@ -125,23 +126,24 @@
 <v-dialog v-model="dialog" persistent max-width="600">
     <v-card>
         <v-card-title>
-            <span class="headline">Edit Item</span>
-        </v-card-title>
-        <v-card-text>
-            <!-- Form or content for editing goes here -->
-            <p>Editing item with ID: {{ currentItem.id }}</p>
-        </v-card-text>
-        formValido {{ formValido }} <br>
+            <span class="headline">Atualização de Dados Financeiros</span>
+        </v-card-title> 
+        
+        <!-- formValido {{ formValido }} <br>
         valid {{ valid }} <br>
-        dadosModal {{  JSON.stringify( dadosModal )  }}
+        dadosModal {{  JSON.stringify( dadosModal )  }} -->
 
         <v-form v-model="valid" style="background-color: #f3f5f0" ref="formModal">
         <v-container>
+          <v-row class="justify-center">
+         <v-col cols="auto">
+        
           <!-- ############################ LINHA 1 ###########################-->
           <label for="startDate">Data de Pagamento: </label>
-          <input type="date" style="width: 40%" class="campo-data" id="startDate" v-model="this.dadosModal.financeiro.dataPagamento">
+          <input type="date" style="width: 50%" class="campo-data" id="startDate" v-model="this.dadosModal.financeiro.dataPagamento">
 
           <v-autocomplete
+              class="mt-5"
               v-model="this.dadosModal.financeiro.mesReferencia"
               :items="meses"
               :rules="mesReferenciaRules"
@@ -192,7 +194,7 @@
               :items="tiposPagamento"
               :rules="tipoPagamentoRules"
               max-width="400px"
-              label="Situação do débito"
+              label="Tipo de pagamento"
               density="comfortable"
               prepend-inner-icon="mdi-list-status"
               variant="outlined"
@@ -200,8 +202,12 @@
               required 
           ></v-autocomplete> 
 
-          CONDICAO_UPLOAD_COMPROVANTE {{  this.CONDICAO_UPLOAD_COMPROVANTE  }}
-          <!-- ============== CAMPO SENHA ============== --> 
+          <v-card-text class="text-medium-emphasis text-caption mb-2">
+            Faça o upload de comprovante de pagamento abaixo, caso necessário.
+          </v-card-text>
+
+          <!-- CONDICAO_UPLOAD_COMPROVANTE {{  this.CONDICAO_UPLOAD_COMPROVANTE  }}
+           ============== CAMPO SENHA ============== --> 
           <MySimpleUpload 
               v-if="( this.CONDICAO_UPLOAD_COMPROVANTE )"
               :id-consulta="this.dadosModal.financeiro.idConsultaAgenda" 
@@ -226,12 +232,13 @@
             Atualizar
             </v-btn>
 
-            <v-btn class="mt-4" color="lightskyblue" block @click="reset" >
+            <v-btn class="mt-4" color="lightskyblue" @click="reset" >
                 <v-icon icon="mdi-restore"></v-icon> 
             </v-btn> 
  
         </div>
-        
+      </v-col>
+    </v-row>
       </v-container>
   </v-form>
 
@@ -242,6 +249,14 @@
         </v-card-actions>
     </v-card>
 </v-dialog>
+
+
+<!-- ################## MODAL MODAL MODAL  MODAL MODAL MODAL MODAL MODAL MODAL MODAL ######################### -->
+<!-- ################## MODAL MODAL MODAL  MODAL MODAL MODAL MODAL MODAL MODAL MODAL ######################### -->
+<!-- ################## MODAL MODAL MODAL  MODAL MODAL MODAL MODAL MODAL MODAL MODAL ######################### -->
+<!-- ################## MODAL MODAL MODAL  MODAL MODAL MODAL MODAL MODAL MODAL MODAL ######################### -->
+<!-- ################## MODAL MODAL MODAL  MODAL MODAL MODAL MODAL MODAL MODAL MODAL ######################### -->
+<!-- ################## MODAL MODAL MODAL  MODAL MODAL MODAL MODAL MODAL MODAL MODAL ######################### -->
 
 
   
@@ -405,7 +420,7 @@
          this.dadosModal.financeiro.nomeArquivo = filename;
       },
       handleUpload( flag )           {
-         alert("- Upload OK !!!! " + flag );
+         // alert("- Upload OK !!!! " + flag );
          this.atualiza();
       },
       reset()                  {
@@ -417,7 +432,7 @@
                this.currentItem = item;
                this.dadosModal = this.currentItem;
                this.dialog = true;
-               alert( JSON.stringify( this.currentItem  ) );
+               // alert( JSON.stringify( this.currentItem  ) );
       },
       downloadFile() {
           // Replace with your actual PHP script URL and remote file URL
@@ -457,9 +472,21 @@
          this.valid = await this.$refs.formModal.validate();
         
         if ( this.dadosModal.financeiro.situacaoDebito == "pago" )  {
-             if ( ( this.dadosModal.financeiro.dataPagamento == "" ) || ( this.dadosModal.financeiro.dataPagamento == "0000-00-00" ) ) 
+             if ( ( this.dadosModal.financeiro.dataPagamento == "" ) || ( this.dadosModal.financeiro.dataPagamento == "0000-00-00" ) 
+                || ( this.dadosModal.financeiro.dataPagamento == null ) ) 
              {
                 this.$bus.emit('showModal', { message: "Preencha a data de pagamento.", msgType: "warning"} );
+                this.valid = false;
+                return;
+             }
+        } else {
+
+            // alert( "DTA PGMT = " + this.dadosModal.financeiro.dataPagamento );
+
+            if ( ( this.dadosModal.financeiro.dataPagamento != "" ) && ( this.dadosModal.financeiro.dataPagamento != "0000-00-00" ) 
+                  && ( this.dadosModal.financeiro.dataPagamento != null ) ) 
+             {
+                this.$bus.emit('showModal', { message: "Situação de débito aberto com data de pagamento definida. Altere um dos valores.", msgType: "warning"} );
                 this.valid = false;
                 return;
              }
@@ -468,7 +495,7 @@
              this.dadosModal.financeiro.dataPagamento = "";
 
         if (!this.valid)  { 
-            alert("- INVALIDO !!");
+            // alert("- INVALIDO !!");
             return;
         } 
         console.log("-- DADOS ED ==>> " + JSON.stringify( this.dadosModal ));

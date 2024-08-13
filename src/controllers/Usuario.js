@@ -27,10 +27,24 @@ export default class Usuario    {
 
   async novoUsuario(data) 
   {
-    console.log( "MODELO?!?!" + JSON.stringify( this.usuarioModel ));
+    // console.log( "MODELO?!?!" + JSON.stringify( this.usuarioModel ));
     try {
          const response = await this.usuarioModel.novoUsuarioAPI(data);
-         alert( "Usu Controller || resp ? " + JSON.stringify( response ) ); 
+         // alert( "Usu Controller || resp ? " + JSON.stringify( response ) ); 
+         return response;
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw error;
+    }
+  }
+
+
+  async consultarUsuario( userData ) 
+  {
+    // console.log( "Modelo ?!?!" + JSON.stringify( this.agendaModel ));
+    try {
+         const response = await this.usuarioModel.consultarUsuarioAPI(  userData );
+         console.log( "Consultar Usuario.js || resp ? " + JSON.stringify( response ) ); 
          return response;
     } catch (error) {
       console.error('Error creating user:', error);

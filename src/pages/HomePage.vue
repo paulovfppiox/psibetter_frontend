@@ -1,6 +1,6 @@
 <template> 
     
-    DADOS_USUARIO {{ JSON.stringify( DADOS_USUARIO ) }}
+    <!-- DADOS_USUARIO {{ JSON.stringify( DADOS_USUARIO ) }} -->
       
     <v-overlay 
        v-model="overlay" 
@@ -32,7 +32,7 @@
           <div class="w-100" > 
                                
                <h1 class="text-h5 text-lg-h5" style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
-                   <b> Bem-vindo(a) {{ this.DADOS_USUARIO.nome }} </b>
+                   <b> Bem-vindo(a) {{ DADOS_USUARIO.nome }} </b>
                </h1>  
           </div>
 
@@ -74,13 +74,13 @@
                   append-icon="mdi-open-in-new"
                   class="mx-auto"
                   max-width="344"
-                  prepend-icon="mdi-file-document-edit"
+                  prepend-icon="mdi-cash-100"
                   rel="noopener"
-                  subtitle="Organize aqui suas receitas emitidas, e lista de medicações por pacientes."
+                  subtitle="Organize todos seus recibos."
                   target="_blank"
-                  title="Receituário"
+                  title="Financeiro"
                   @click="() => { 
-                      this.showModal();
+                      this.$router.push({ path:'/financeiro', replace:true });
                   }"
               ></v-card>
           </div>
@@ -225,34 +225,41 @@
       async verificaCadastroIncompleto()  
       {         
           //alert("Dias de Registrado: " + dias );
+
+          /*const minhaContaOk = localStorage.getItem('minhaContaOk');
+          alert( "MINHA CONTA?!? " + minhaContaOk );
+          if ( minhaContaOk )
+               return;*/
           
           var UF = this.DADOS_USUARIO.uf;
           var celular = this.DADOS_USUARIO.celular;
 
           //alert( UF + " || " + celular );
 
-          /* Verifica se dados obrigatórios do usuário já foram atualizados*/
+          /* Verifica se dados obrigatórios do usuário já foram atualizados */
           if ( ( UF == null ) || ( UF == "" ) && ( celular == null ) || ( celular == "0" ) ) {
                 
                  var dataAtual = await this.getDataHoraAtual("data");
                  //alert("DATA Atual?!? " + dataAtual + " || " + this.DADOS_USUARIO.dataRegistro );
 
-                 var dataRegistroBD;
+                 var dataRegistroBD, dias;
                  if ( this.DADOS_USUARIO.dataRegistro )
                     dataRegistroBD = this.DADOS_USUARIO.dataRegistro.split(" ");
-                
-                //alert("DATA1 = " + dataRegistroBD[0] + " || DATA2 = " +  dataAtual );
-                var dias = this.difDiasEntreDatas( dataRegistroBD[0], dataAtual );
+                 
 
+                if ( ( dataRegistroBD != null ) && ( dataRegistroBD != undefined ) )  {
+                    //alert("DATA1 = " + dataRegistroBD[0] + " || DATA2 = " +  dataAtual );
+                     dias = this.difDiasEntreDatas( dataRegistroBD[0], dataAtual );
+                }
                  //alert(" Dif. dias " + dias );
                  // if ( dias == 0 )   {
-                 if ( dias >= 20 )   {
+                 if ( dias >= 0 )   {
                      // Ativa modal, com cobrança de preenchimento
                      // this.$bus.emit('showModal', { message: "Os seus dados cadastrais estão incompletos. Para melhor interação, preencha-os na sessão 'Minha Conta' no canto direito/superior da barra de tarefas.", msgType: "warning" } );
                      this.overlay = true; 
-                     setTimeout(() => {
+                     //alert( "Os seus dados cadastrais estão incompletos. Para melhor interação, preencha-os na sessão 'Minha Conta' no canto direito/superior da barra de tarefas." );       
+                      setTimeout(() => {
                       alert( "Os seus dados cadastrais estão incompletos. Para melhor interação, preencha-os na sessão 'Minha Conta' no canto direito/superior da barra de tarefas." );       
-                    
                     }, 50); // 5000 milliseconds = 5 seconds
                 }
           }

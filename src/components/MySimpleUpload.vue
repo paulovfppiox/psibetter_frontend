@@ -1,43 +1,52 @@
 <template>
 <form  @submit.prevent="sendFile" enctype="multipart/form-data">
 
-    <!-- DADOS_USUARIO_oi {{  DADOS_USUARIO  }} -->
+    <!-- DADOS_USUARIO_oi {{  DADOS_USUARIO  }} 
+    PATH_ATUAL {{ this.PATH_ATUAL }}
+    tipoArquivo {{  tipoArquivo  }} -->
 
     <div class="field">
-        <p for="file" class="label"> Upload de comprovante </p>
+        <p for="file" class="label"> Upload de {{ tipoArquivo }} </p>
         
+        <!-- Caso Upload de imagem de usuário -->
         <input 
+            class="mb-2 mt-2"
+            v-if="(this.PATH_ATUAL == 'home')"
+            id="uploadfiles"
+            type="file" 
+            ref="filesRef"
+            @change="selectImageFile"
+            />
+
+        <!-- Caso Upload de comprovantes -->
+        <input 
+            v-else
             id="uploadfiles"
             type="file" 
             ref="filesRef"
             @change="selectFile"
-            />
+            />    
 
         <div>
-        <v-btn @click='sendFile'> Enviar/Atualizar Comprovante </v-btn>
+        <v-btn @click='sendFile' color="secondary"> Enviar/Atualizar Pagamento </v-btn>
         </div>
-        nome do Arquivo {{ this.nomeArquivo }}
+        <!-- nome do Arquivo {{ this.nomeArquivo }}
         ID CONSULTA {{ this.idConsulta }}
-        DATA PAGMTO {{ this.dataPagamento  }}
+        DATA PAGMTO {{ this.dataPagamento  }} -->
     </div>
 </form>
 </template>
     
 <script>
+/* eslint-disable */
 import axios from 'axios';
 
     export default {
     
     name: "MySimpleUpload",
     props: {
-      idConsulta: {
-        type: String,
-        required: true
-      },
-      dataPagamento: {
-        type: String,
-        required: true
-      }
+      idConsulta: String,
+      dataPagamento: String,
     },
     watch: {
         idConsulta(newValue)    {
@@ -48,12 +57,17 @@ import axios from 'axios';
         return {
             files: "",
             formData: null,
-            nomeArquivo: ""
+            nomeArquivo: "",
+            tipoArquivo: (this.PATH_ATUAL === 'home') ? 'Comprovante' : 'Imagem'
         }
     },
     computed:    {       
       DADOS_USUARIO()  {
          return this.$store.state.user;
+      },
+      PATH_ATUAL()
+      {
+          return this.$route.name;
       }
     },
     methods:    {
@@ -76,9 +90,9 @@ import axios from 'axios';
 
                 // Check if the file name matches "comprovante"
                 if (!originalFileName.toLowerCase().startsWith("comprovante")) {
-                alert('Only files named "comprovante" are allowed.');
-                this.$refs.filesRef.value = ''; // Clear the input field
-                return; // Stop further processing
+                    alert('Apenas arquivos nomeados com "comprovante" são permitidos.');
+                    this.$refs.filesRef.value = ''; // Clear the input field
+                    return; // Stop further processing
                 }
 
                 // Create a new File object with the new name
@@ -89,41 +103,60 @@ import axios from 'axios';
                 this.formData.append("files[]", renamedFile);
                 this.nomeArquivo = newFileName;
             }
-
             this.formData.append("userId", this.DADOS_USUARIO.id);
             this.$emit('get-filename', this.nomeArquivo);
         },
-        selectFileOLD() {
+        selectImageFile() {
             this.formData = new FormData();
             
             // Read selected files
             this.files = this.$refs.filesRef.files;
-            const totalfiles = this.files.length;
+            const totalFiles = this.files.length;
 
-            //alert( this.idConsulta + "_" + this.dataPagamento );
-            const baseName = `${this.idConsulta}_${this.dataPagamento}`;
-            
-            for (let i = 0; i < totalfiles; i++) {
-                // Get the original file
+            // Base name for the file
+
+            // Reset the file name
+            this.nomeArquivo = "";
+
+            for (let i = 0; i < totalFiles; i++) {
                 const file = this.files[i];
-                
-                // Create a new File object with a new name
-                const newFileName = `${baseName}_${file.name}`;
+                const originalFileName = file.name;
 
+                // Check if the file name matches "comprovante"
+                if (! ( originalFileName.toLowerCase() === "foto.png") ) {
+                    // alert('Arquivo deve conter o nome "foto".');
+                    this.$bus.emit('showModal', { message: 'Arquivo deve conter o nome "foto" do tipo "png".', msgType: "warning"} );
+                    this.$refs.filesRef.value = ''; // Clear the input field
+                    return; // Stop further processing
+                }
+
+                // Create a new File object with the new name
+                const newFileName = `${originalFileName}`;
                 const renamedFile = new File([file], newFileName, { type: file.type });
-                
+
                 // Append the renamed file to FormData
                 this.formData.append("files[]", renamedFile);
                 this.nomeArquivo = newFileName;
             }
-            this.formData.append("userId", this.DADOS_USUARIO.id); 
-            this.$emit('get-filename', this.nomeArquivo );
+
+            this.formData.append("userId", this.DADOS_USUARIO.id);
+            this.$emit('get-filename', this.nomeArquivo);
         },
         async sendFile()  {  
 
-            alert( "USER_ID : " + this.DADOS_USUARIO.id );
-            alert( "http://184.72.238.232/psibetter/financeiro/upload.php" );
-            const URL = 'http://184.72.238.232/psibetter/financeiro/upload.php/';
+            // alert( "USER_ID : " + this.DADOS_USUARIO.id );
+            
+            var URL = '';
+            
+            /* Upload da imagem do usuário */
+            if ( this.PATH_ATUAL == 'home' )    {
+                 URL = 'http://184.72.238.232/psibetter/usuarios/upload_img.php/';
+                
+            /* Upload de comprovantes de pagamento */     
+            } else {
+                URL = 'http://184.72.238.232/psibetter/financeiro/upload.php/';
+            }
+
             console.log( "-- url = " + URL );
 
             try {

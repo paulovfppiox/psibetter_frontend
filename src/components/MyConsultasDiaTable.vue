@@ -119,7 +119,7 @@
           } else {
             // this.$emit('row-clicked', true );
             // this.$bus.emit('busDadosFicharioConsulta', obj.item );
-            alert("* ")
+            //alert("* ")
           }
 
       }, 

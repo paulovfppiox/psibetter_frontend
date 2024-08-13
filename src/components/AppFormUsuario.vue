@@ -54,7 +54,7 @@
                 <!-- <MyDataInput label="Data de nascimento*" :value="dadosUsuario.idade" /> -->
                 <v-text-field
                   v-model="dadosUsuario.idade"
-                  :rules="idadeRules"
+                  :rules="idadeRules" 
                   prepend-inner-icon="mdi-history"
                   hint="Informe idade"
                   type='number'
@@ -141,6 +141,23 @@
                     required 
                 ></v-autocomplete>
               </v-col>
+
+              <v-col cols="12" md="4" >
+                  <v-autocomplete
+                    v-model="dadosUsuario.tipoPagamento"
+                    :rules="tipoPagamentoRules"
+                    :items="this.pagamentoItems"
+                    max-width="400px"
+                    label="Tipo de Pagamento de Consultas"
+                    :bg-color="camposBgColor"
+                    density="comfortable"
+                    placeholder="Informe pagamento"
+                    prepend-inner-icon="mdi-briefcase"
+                    variant="outlined"
+                    :readonly="formReadonly"
+                    required 
+                ></v-autocomplete>
+              </v-col>
           </v-row>
 
 
@@ -148,13 +165,12 @@
 
           <v-row>
            <v-col cols="12" md="4">
-             <v-autocomplete
+             <v-text-field
                :bg-color="camposBgColor"
                v-model="dadosUsuario.municipio"
-               :items="municipios"
                label="Município"
                :readonly="formReadonly"
-             ></v-autocomplete>
+             ></v-text-field>
            </v-col>
 
            <v-col cols="12" md="4" >
@@ -296,6 +312,7 @@ export default {
             municipio: " ", 
 			      uf: " ", 
 			      profissao: "",
+            tipoPagamento: ""
           },
           nomeRules: [
             value => {
@@ -310,7 +327,15 @@ export default {
             },
           ],
           generos: [ 'Homem', 'Mulher', 'Não-binário', 'Outro' ],
-          
+          tipoPagamentoRules: [
+            value => {
+              if ( (value == "mensal") || (value == "consulta") ) {
+                return true
+              } else {
+                return 'Tipo de pagamento inválido.'
+              }
+            },
+          ],
           generoRules:  [
             value => {
               if (value) return true
@@ -325,6 +350,7 @@ export default {
           ],
           idadeRules: [
             value => {
+              // alert("oI!" + value);
               if (value) return true
               return 'Idade é obrigatório.'
             },
@@ -359,7 +385,7 @@ export default {
               municipio: '', /* Default */
               UF: '',    /* Default */
           },
-          
+          pagamentoItems: [ 'mensal', 'consulta' ],
           tiposMoradias: [ 'Apartamento', 'Casa', 'Condomínio', 'Outro' ],
           tiposMoradiasRules: [
             value => {
@@ -369,7 +395,8 @@ export default {
           ],
  
           municipios: [ "João Pessoa", 'Bayeux', 'Cabedelo' ],
-          UFs: ['PB', 'PE', 'RN', 'RJ'],
+          UFs: [ 'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT',
+                 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO' ],
           UFRules: [
             value => {
               if (value) return true
@@ -426,7 +453,7 @@ export default {
                           return 0;  
                    }        else               {
                         var dados = response.data;  
-                        alert( dados.uf + " ||| " + dados.localidade );
+                        // alert( dados.uf + " ||| " + dados.localidade );
                         this.dadosEndereco.municipio  = dados.localidade;
                         this.dadosEndereco.UF = dados.uf;
                    }
@@ -450,7 +477,7 @@ export default {
         if ( this.$DEBUG_ON )       {
             if ( event.key == "=" )   {
                  
-                this.dadosUsuario.idade = "1987-01-01";
+                this.dadosUsuario.idade = "23";
                 this.dadosUsuario.nome = 'Jose Bebug ' + (Math.random() * (10 - 0) + 0).toFixed(4);
                 this.dadosUsuario.genero = 'Masculino';
                 this.dadosUsuario.celular = 996612212;

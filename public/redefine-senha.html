@@ -100,6 +100,9 @@
         // Get the URL parameters
         const data = new URLSearchParams( window.location.search ).get('data');
         const email = data;
+
+        const ENDPOINT_URL = "http://localhost/psibetter_backend/services-api.php";
+        // const ENDPOINT_URL = "http://184.72.238.232/psibetter/psibetter_backend/services-api.php";
         alert("EMAIL: " + email );
 
         function togglePassword(fieldId) {
@@ -124,7 +127,6 @@
 
         async function consultaUsuarioAPI() 	{
 
-                        
             // dados = { "dados": { "entidade": "usoEquipamento", "operacao": "devolucaoRead" } };	
             dados = {
                 "data": {
@@ -150,7 +152,7 @@
             };
 
             try {
-                const response = await fetch("http://localhost/psibetter/services-api.php", options);
+                const response = await fetch(ENDPOINT_URL, options);
                 // Check response status
                 if (!response.ok) {
                 throw new Error(`Error! status: ${response.status}`);
@@ -192,7 +194,7 @@
                 };
 
                 try {
-                    const response = await fetch("http://localhost/psibetter/services-api.php", options);
+                    const response = await fetch(ENDPOINT_URL, options);
                     // Check response status
                     if (!response.ok) {
                     throw new Error(`Error! status: ${response.status}`);
@@ -231,7 +233,13 @@
 
             errorMessage.textContent = '';
             var userData = await consultaUsuarioAPI();
-            userData.senha = password1;
+
+            if ( userData == null ) {
+                 alert("Email de usuário inválido ou email de usuário não cadastrado.");
+                 return;
+            }
+            // var cifrada = btoa( senhaPlana );
+            userData.senha = btoa( password1 );
 
             //alert( "User ID?!? " + userData.userID + " || " + userData.email + " || " + userData.senha );
             var resp = await atualizaSenhaAPI( userData );

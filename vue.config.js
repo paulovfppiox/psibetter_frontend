@@ -22,13 +22,17 @@ module.exports = defineConfig({
   
   // Definição de proxies, para driblar CROSS-ORIGIN erros
   devServer:    {
+    /** Remove o error: ResizeObserver loop completed with undelivered notifications */
+    client: {
+      overlay: false
+    },
     proxy: {
         '/psibetter/psibetter_backend/':   {
             target: 'https://10.255.243.162:80/', // Replace with the API URL
             ws: true,
             changeOrigin: true
         }, 
-		'/psibetter/templates': {
+		 '/psibetter/templates': {
         target: 'http://localhost:80',
         changeOrigin: true,
         pathRewrite: { '^/psibetter/templates': '/psibetter/templates' }

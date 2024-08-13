@@ -5,6 +5,50 @@
     rail {{ rail }}
     drawer {{ drawer }}-->
 
+    <!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
+    <!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
+    <!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
+    <!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
+    <!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
+
+    <v-dialog v-model="userImgModal" max-width="600">
+    <v-card>
+        <v-card-title>
+            <span class="headline"> Selecione o seu avatar </span>
+        </v-card-title> 
+
+        <v-form v-model="valid" style="background-color: #f3f5f0" ref="formModal">
+        <v-container>
+          <!-- ############################ LINHA 1 ###########################-->
+          
+           <p> Avatar prévio </p>
+          <v-img
+            class="mx-auto my-6"
+            width="150"
+            height="150"
+            :src="URL_IMAGEM"
+          ></v-img>
+
+          <!-- ============== CAMPO SENHA ==============  --> 
+          <MySimpleUpload 
+              :id-consulta="123"  >
+          </MySimpleUpload>
+ 
+        
+      </v-container>
+  </v-form>
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="closeModal">Fechar</v-btn>
+        </v-card-actions>
+    </v-card>
+</v-dialog>
+<!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
+<!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
+
 
     <v-navigation-drawer
         style="background-color: lightgray;"
@@ -15,8 +59,9 @@
         :width="MENU_WIDTH"
       > 
         <v-list-item
+          @click="onUserImageClick"
           variant="tonal"
-          prepend-avatar=https://www.medguias.com.br/storage/images/announcements/xsK9jS096nlyebKWdp2UWkQQCuJ6q3c4rlDVbrG2.png
+          :prepend-avatar="require('@/assets/user.png')"
           :title="NOME_USUARIO_PROFISSIONAL"
           nav
         >
@@ -61,7 +106,7 @@
           </v-tooltip>
 
           <!-- <v-tooltip v-model="showTooltip[2]" text="Agenda">-->
-            <v-tooltip v-if="!this.$IS_MOBILE_APP" text="Agenda">
+            <v-tooltip v-if="!$IS_MOBILE_APP" text="Agenda">
               <template v-slot:activator="{ props }">
                 <v-list-item 
                     v-bind="props"
@@ -113,7 +158,7 @@
       rail {{ rail }} -->
 
     <!-- <v-app-bar  style="background-color: lightgreen;"> -->
-    <v-app-bar  style="background-color: #77e356;">
+    <v-app-bar  style="background-color: #95f279;">
       <v-app-bar-nav-icon @click="this.drawer = !this.drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title style="text-align: left;"> Psibetter® </v-app-bar-title>
@@ -135,15 +180,26 @@
 </script>
 
 <script>
+import MySimpleUpload  from '@/components/MySimpleUpload.vue'; 
+
 // import eventBus from '@/utils/eventBus';
   export default {
+    components:         { 
+      MySimpleUpload,
+    },
     data: () => ({ 
       drawer: true, /** Barra superior */
       rail: true,   /** Menu lateral */
       /* showTooltip: [],*/ 
+      userImgModal: false,
+      versionImg: 0,
     }),
+    
     created()    {
       
+    },
+    updated() {
+        this.versionImg++;
     },
     methods:        {
       logoutClick()         {
@@ -155,7 +211,15 @@
           this.$bus.emit('showModal', { message: "Área em construção", msgType: "warning"} );
       },
       handleMouseOver() {
-          alert("** OLÁ!!! ");
+          // alert("** OLÁ!!! ");
+      },
+      onUserImageClick()    {
+          
+          /* if ( !this.rail )
+          this.userImgModal = true;*/
+      },
+      closeModal()  {
+          this.userImgModal = false;
       }
     },
     computed:               {  
@@ -171,10 +235,14 @@
         NOME_USUARIO_PROFISSIONAL() 
         {
             if ( this.$store.state.user.tipo != "paciente" )  {
-                 return "Dr(a). " +  this.$store.state.user.nome;
+                 return "Sr(a). " +  this.$store.state.user.nome +  " (" + 
+                                     this.$store.state.user.id + ")";
             }
             return this.$store.state.user.nome;
          }, 
+        URL_IMAGEM() {
+            return `http://paivaservices.com/psibetter/usuarios/imagens/${this.DADOS_USUARIO.id}/foto.png?t=${this.versionImg}`;
+        }
     }
   }
 </script>

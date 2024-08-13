@@ -167,7 +167,7 @@ export default {
               return 'Preencha o nome do paciente.'
             },
             value => {
-              if (value?.length <= 20) return true
+              if (value?.length <= 40) return true
 
               return 'O nome está muito extenso'
             },
@@ -189,7 +189,7 @@ export default {
     },
     mounted()         {
         this.$bus.on('busFormUsuarioDados', ( dadosFicharioConsulta ) => {
-            alert( '[*] Dados ?!?' + JSON.stringify( dadosFicharioConsulta ) );
+            // alert( '[*] Dados ?!?' + JSON.stringify( dadosFicharioConsulta ) );
          })
     },
     computed: {  

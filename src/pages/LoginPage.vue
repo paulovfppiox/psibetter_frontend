@@ -4,7 +4,7 @@
     <v-img
       class="mx-auto my-6"
       width="150"
-      :src="require('@/assets/logo.png')"
+      :src="require('@/assets/logo.jpeg')"
     ></v-img>
     <!-- 
       <h1 style="margin-top: 20px; margin-bottom: 20px;"> {{this.$APP_NAME}}  </h1>

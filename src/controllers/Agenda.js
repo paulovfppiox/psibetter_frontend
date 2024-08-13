@@ -6,7 +6,7 @@ export default class Agenda    {
   constructor() 
   {
       this.agendaModel = new AgendaModel();
-      console.log( "Agenda || criando... " + JSON.stringify( this.agendaModel ) );      
+      // console.log( "Agenda || criando... " + JSON.stringify( this.agendaModel ) );      
       this.eventos = [];
   }
 
@@ -57,7 +57,7 @@ export default class Agenda    {
     const evento = dadosFicharioAgenda;
     try {
          const response = await this.agendaModel.atualizarAgendaAPI( evento );
-         alert( "Agenda fichario add 11 || resp ? " + JSON.stringify( response ) ); 
+         // alert( "Agenda fichario add 11 || resp ? " + JSON.stringify( response ) ); 
          return response;
     } catch (error) {
       console.error('Error creating user:', error);

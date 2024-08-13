@@ -30,7 +30,7 @@
 
       <div class="centralizaToogle">
           <v-switch
-              :model-value="this.isEdicaoOn" color="primary" label="Habilitar Edição" 
+              :model-value="this.isEdicaoOn" color="primary" label="Habilitar Edição de Prontuário" 
               @change="this.isEdicaoOn = !this.isEdicaoOn"
             ></v-switch>
       </div>

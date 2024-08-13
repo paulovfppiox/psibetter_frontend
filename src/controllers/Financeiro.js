@@ -6,17 +6,17 @@ export default class Agenda    {
   constructor() 
   {
       this.financeiroModel = new FinanceiroModel();
-      console.log( "Financeiro || criando... " + JSON.stringify( this.financeiroModel ) );      
+      // console.log( "Financeiro || criando... " + JSON.stringify( this.financeiroModel ) );      
   } 
  
 
   async cadastrarFinanceiro( dados ) 
   {
-    console.log( "Cadastrar Finanças !?!" + JSON.stringify( dados )); 
+    // console.log( "Cadastrar Finanças !?!" + JSON.stringify( dados )); 
 
     try {
          const response = await this.financeiroModel.cadastrarFinanceiroAPI( dados );
-         alert( "financeiroModel response: " + JSON.stringify( response ) ); 
+         // alert( "financeiroModel response: " + JSON.stringify( response ) ); 
          return response;
     } catch (error) {
       console.error('Error creating user:', error);
@@ -27,11 +27,11 @@ export default class Agenda    {
   async atualizarFinanceiro( dados ) 
   {
 
-    console.log( "** DADOS 1111 ?!? " + JSON.stringify( dados ) );
+    // console.log( "** DADOS 1111 ?!? " + JSON.stringify( dados ) );
 
     try {
          const response = await this.financeiroModel.atualizarFinanceiroAPI( dados );
-         alert( "Agenda financeiro add || resp ? " + JSON.stringify( response.data ) ); 
+         // alert( "Agenda financeiro add || resp ? " + JSON.stringify( response.data ) ); 
          return response;
     } catch (error) {
       console.error('Error creating user:', error);
@@ -44,7 +44,7 @@ export default class Agenda    {
     // console.log( "Modelo ?!?!" + JSON.stringify( this.agendaModel ));
     try {
          const response = await this.financeiroModel.consultarFinanceiroAPI(  nomePaciente, dataHoraIni, dataHoraFim, profissionalId );
-         alert( "Consultar Financeiro.js || resp ? " + JSON.stringify( response ) ); 
+         // alert( "Consultar Financeiro.js || resp ? " + JSON.stringify( response ) ); 
          return response;
     } catch (error) {
       console.error('Error creating user:', error);

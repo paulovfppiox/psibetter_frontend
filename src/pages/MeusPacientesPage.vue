@@ -19,7 +19,8 @@
       <v-tabs-window v-model="tab">
         <v-tabs-window-item value="tab-meus-pacientes">
 
-            <label class="text-subtitle-1 font-weight-bold"> Últimos Atendimentos </label>
+            <label class="text-subtitle-1 font-weight-bold"> Listagem de Pacientes </label>
+            <p> Atenção: Clique sobre um paciente, para visualizar o seu prontuário. </p>
             <MyPacientesTable/>
             
             <div class="d-flex flex-column flex-md-row justify-space-between">

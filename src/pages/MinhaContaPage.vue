@@ -13,7 +13,6 @@
     </div>
 
     <!-- formValido? {{  formValido  }} <br>
-
     DADOS_USUARIO {{ JSON.stringify(DADOS_USUARIO) }}
     email {{ DADOS_USUARIO.email }}
     senha {{ SENHA }} -->
@@ -208,6 +207,7 @@
               <v-col cols="12" md="4">
                 <v-text-field
                     v-model="this.dadosMinhaConta.dadosProfissionais.anoConclusao"
+                    :rules="anoConclusaoRules"
                     prepend-inner-icon="mdi-calendar-month"
                     type="number"
                     max-width="200px"
@@ -266,7 +266,7 @@
                     type="number"
                     max-width="400px"
                     :counter="8"
-                    label="Valor da consulta*"
+                    label="Valor da consulta"
                     bg-color="white"
                     variant="outlined"
                     density="comfortable"
@@ -419,6 +419,17 @@ const minhaConta = new MinhaConta();
               return 'Curso é obrigatório.'
             },
           ],
+          anoConclusaoRules: [
+
+            value => {
+                if ( ( value >= 1900 ) && ( value <= 2040 ) )  {
+                     return true;
+                }  else  {
+                   return 'Ano de conclusão inválido.'
+                }
+            },
+
+          ],
           idadeRules: [
             value => {
               if (value) return true
@@ -473,17 +484,15 @@ const minhaConta = new MinhaConta();
         }
     },
     methods:                    {
-        async validate ()     { 
-          const { valid } = await this.$refs.form.validate()
-
-          if ( valid )        {
-              this.loginAPI();
-              //alert('Form is valid');
-          }  
-        },
-        cadastrar()           {
+        
+        async cadastrar()           {
           // setTimeout( this.sendDataAPI, 50 );
-          this.cadastrarMinhaContaAPI();
+          const { valid } = await this.$refs.form.validate();
+          if (valid) 
+              this.cadastrarMinhaContaAPI();
+          else
+              this.$bus.emit('showModal', { message: 'Preencha todos os campos obrigatórios.', msgType: "warning"} );
+
         },
         atualizar()           {
           this.atualizarMinhaContaAPI();
@@ -566,10 +575,12 @@ const minhaConta = new MinhaConta();
                     this.error = error.message;
               });
         },
-        cadastrarMinhaContaAPI()               { 
+        cadastrarMinhaContaAPI()                   { 
 
-              if (!this.formValido) {
+              // alert( "-Form valido?!" + this.formValido );
+              if ( this.formValido !== true )  {
                    this.$bus.emit('showModal', { message: "Preencha todos os campos obrigatórios", msgType: "warning"} );
+                   return;
               }
 
               /**1) No primeiro acesso (para realizar o cadastro iniciais das infos faltantes), é preciso carregar 
@@ -580,25 +591,45 @@ const minhaConta = new MinhaConta();
               this.dadosMinhaConta.dadosUsuario.crm_crp = this.DADOS_USUARIO.crm_crp;
               this.dadosMinhaConta.dadosUsuario.dataRegistro = this.DADOS_USUARIO.dataRegistro;
               //console.log( "*** DADOS USUARIO RENOVADOS? " + JSON.stringify( this.dadosMinhaConta.dadosUsuario ) );
+              
+
+              // ************** VALIDAÇÕES *******************
+              var consulta = this.dadosMinhaConta.dadosProfissionais.valorConsulta;
+              //this.dadosMinhaConta.dadosProfissionais.anoConclusao
+              //alert( "Valor? " + consulta );
+              if ( ( consulta == null ) || ( consulta == '' ) ) {
+                     this.dadosMinhaConta.dadosProfissionais.valorConsulta = "0";
+              }
 
               this.minhaConta.setDadosMinhaConta(  this.dadosMinhaConta.dadosUsuario , this.dadosMinhaConta.dadosProfissionais );
-              this.minhaConta.cadastrarMinhaConta( this.dadosMinhaConta.dadosUsuario , this.dadosMinhaConta.dadosProfissionais ).then(response => {
-                  // console.log('Cadastro Prontuário Response:', response);
+              this.minhaConta.cadastrarMinhaConta( this.dadosMinhaConta.dadosUsuario , this.dadosMinhaConta.dadosProfissionais ).
+              then(response => {
+                  console.log('Cadastro Minha conta Response:', response);
                   // alert( response.code + " ||| " + response.message );
+
+                  // alert("DADOS USER? " + JSON.stringify( this.dadosMinhaConta.dadosUsuario ));
 
                   // alert( response.code + " ||| " + response.message );
                   if ( response.code == 0 )      {
                       // this.$bus.emit('showModal', response.message );
+                      this.$store.commit( 'setUser', this.dadosMinhaConta.dadosUsuario );
+                      /* localStorage.setItem('minhaContaOk', true );*/
                       this.$bus.emit('showModal', { message: response.message, msgType: "success"} );
+                      return;
 
                   } else if ( response.code == 99 )  {
                       // this.$bus.emit('showModal', response.message );
                       this.$bus.emit('showModal', { message: response.message, msgType: "warning"} );
+                      return;
                   } 
+
                   if ( response.includes("SQL") && response.includes("Duplicate entry") )  { 
                        if ( response.includes("for key 'profissional") )
                             this.$bus.emit('showModal', { message: "Dados profissionais já cadastrados na base de dados. Entrar em contato com o suporte Psibetter.", msgType: "error"} );
+                       else
+                            this.$bus.emit('showModal', { message: "Entrada duplicada em base de dados, para campo único. Entrar em contato com o suporte Psibetter.", msgType: "error"} );     
                   }
+                  
   
               }).catch(error => {
                 console.error('Error creating user:', error);
@@ -650,19 +681,23 @@ const minhaConta = new MinhaConta();
                      /* alert( response.code + " ||| " + response.message );
                      alert( JSON.stringify( this.abordagensPsicologia ) );*/
 
+                     
                      // alert( response.code + " ||| " + response.message );
                      if ( response.code == 0 )      {
                           // this.$bus.emit('showModal', response.message );
-                          
-                         
                           // Atualiza no STORE
+                          
                           this.$store.commit( 'setUser', dadosUser );
+                          const flag = true;
+                          localStorage.setItem('minhaContaOk', flag );
                           this.$bus.emit('showModal', { message: response.message, msgType: "success"} );
-                          this.$router.push({ path: '/home', replace:true  });
+                          // this.$router.push({ path: '/home', replace:true  });
+                          return;
 
                      } else if ( response.code == 99 )  {
                             // this.$bus.emit('showModal', response.message );
                             this.$bus.emit('showModal', { message: response.message, msgType: "warning"} );
+                            return;
                      } 
                      if ( ( typeof response ) == "string" ) {
                         if ( response.includes("SQL") && response.includes("Duplicate entry") )  { 

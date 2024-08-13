@@ -186,7 +186,11 @@
           </v-col> 
 
           <v-col cols="12" md="4"> 
+            <!-- ( diagnosticosCID.length > 0 ) {{ ( diagnosticosCID.length > 0 ) }}
+              Key to force re-render when data changes -->
            <v-combobox
+              v-if="( diagnosticosCID.length > 0 )"
+              :key="diagnosticosCID.length"  
               v-model="dadosClinicos.doencasPreexistentes"
               :items="diagnosticosCID"
               :rules="formReadonly ? [] : diagnosticosRules"
@@ -314,13 +318,18 @@ import axios from 'axios';
           'Depakote',
           'Depakene',
       ],
-      diagnosticosCID: [ 
-      ],
+      diagnosticosCID: [],
+      /* TODO: ERRADO, VALORES DEVEM ESTAR NO FEMININO */
+      /* TODO: ERRADO, VALORES DEVEM ESTAR NO FEMININO */
+      /* TODO: ERRADO, VALORES DEVEM ESTAR NO FEMININO */
+      /* TODO: ERRADO, VALORES DEVEM ESTAR NO FEMININO */
+      /* TODO: ERRADO, VALORES DEVEM ESTAR NO FEMININO */
+      
       nivelIdeacaoSuicidaItems:   [
-          'Nenhum',
+          'Nenhuma',
           'Leve',
-          'Moderado',
-          'Alto'
+          'Moderada',
+          'Alta'
       ],
       numTentativasSuicidioItens: [
           '0', '1', '2', '3', '4', '5',
@@ -453,32 +462,36 @@ import axios from 'axios';
         document.removeEventListener('keypress', this.handleKeyPress);
   },
   async created() {
-     
-     const sendData = {
-        "data": {
-              "entity": "doencas",
-              "operation": "consultar",
-              "object": {}
-          }
-     }
-     // console.log("SEND DATA >>>> " + JSON.stringify( sendData ) );
-
-     axios.post( this.$SERVICES_ENDPOINT_URL , sendData )
-          .then( response => {
-                  // console.log('-Response DATA == ' + JSON.stringify( response.data ) + typeof response.data );
-                  var data = response.data;
-                  if ( data.code == '0' )      {
-                       // var label = data.data[0].cod_cid + " - " + data.data[0].nome;
-                       // alert("OKOKOKO!!");
-                       this.diagnosticosCID = data.data.map(item => `${item.cod_cid} - ${item.nome}`);
-                  }  
-          })
-          .catch(error => {
-                this.error = error.message;
-          });
-
-    },
+    await this.consultaDoencasCID();
+  },
     methods:  {
+      async consultaDoencasCID()  {
+
+           const sendData = {
+              "data": {
+                    "entity": "doencas",
+                    "operation": "consultar",
+                    "object": {}
+                }
+            }
+          // console.log("SEND DATA >>>> " + JSON.stringify( sendData ) );
+
+          axios.post( this.$SERVICES_ENDPOINT_URL , sendData )
+              .then( response => {
+                      // console.log('-Response DATA == ' + JSON.stringify( response.data ) + typeof response.data );
+                      var data = response.data;
+                      if ( data.code == '0' )      {
+                          // var label = data.data[0].cod_cid + " - " + data.data[0].nome;
+                          // alert("OKOKOKO!!");
+                          this.diagnosticosCID = data.data.map(item => `${item.cod_cid} - ${item.nome}`);
+                          this.diagnosticosCID.push("Nenhum");
+                      }  
+              })
+              .catch(error => {
+                    this.error = error.message;
+              });
+
+      },
       async consultaDadosClinicos( pacienteId ) 
       {
             const sendData = {
