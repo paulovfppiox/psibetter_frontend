@@ -1,38 +1,22 @@
 <template>
 
-  <!-- DADOS?!?! {{ this.DADOS_USUARIO }} -->
-  <v-row>
-      teste
-  </v-row>
-  <v-row>
-    teste 22
-  </v-row>
+    <!--  DADOS?!?! {{ this.DADOS_USUARIO }} -->
 
-  <div class='demo-app'>
-    <div class='demo-app-sidebar'>
-      <div class='demo-app-sidebar-section'>
+    <div style="background-color: lightgray;">
         <h2>Instruções de Uso</h2>
-        <ul>
-          <li> Para adicionar uma nova consulta, basta selecionar a data desejada. </li>
-          <li> Para deletar uma consulta, basta clicar sobre ela. </li>
-        </ul>
-      </div>
-      <div class='demo-app-sidebar-section'>
+        <br/>
+        <p> Para adicionar uma nova consulta, basta selecionar a data desejada. </p>
+        <p> Para deletar uma consulta, basta clicar sobre ela. </p>
+      
         <label>
           <input type='checkbox' :checked='calendarOptions.weekends' @change='handleWeekendsToggle'/>
               Visualizar finais de semana
         </label>
-      </div>
-      <div class='demo-app-sidebar-section'>
+        <br>
+        <br>
         <h2> N° total de consultas agendadas: {{ currentEvents.length }} </h2>
-        <!-- <ul>
-          <li v-for='event in currentEvents' :key='event.id'>
-            <b>{{ event.startStr }}</b>
-            <i>{{ event.title }}</i>
-          </li>
-        </ul> -->
-      </div>
     </div>
+
 
     <!-- MENUS_PACIENTES_NOMES {{ JSON.stringify( MENUS_PACIENTES_NOMES ) }} 
     tituloNovoEvento {{ tituloNovoEvento }}    <br>
@@ -64,8 +48,14 @@
           <input type="time" id="appt" name="appt" v-model="this.horaFimNovoEvento" style="background-color: white; width: 100px; height: 50px; margin-left: 10px">
 
         </v-card-text>
+        <v-checkbox
+          style="font-size: 10px; margin-top: 20px; color:black"
+          v-model="agendarTrimestre"
+          label="Agendar Trimestre?" 
+          value="1"
+        ></v-checkbox>
         <v-card-actions>
-          <v-btn  color="primary" @click="this.addEvento()"> Adicionar Evento </v-btn>
+          <v-btn  color="primary" @click="this.addEventos()"> Adicionar Evento </v-btn>
         </v-card-actions>
         </v-card>
     </v-dialog>
@@ -75,7 +65,7 @@
     <!-- calendarLocale {{  calendarOptions.calendarLocale }}
     :locale="calendarOptions.calendarLocale"
     -->
-    <div class='demo-app-main'> 
+    <div class='demo-app-main' style="background-color: white"> 
       
       <div class="visao-label">
            Perspectiva
@@ -92,7 +82,6 @@
         </template>
       </FullCalendar>
     </div>
-  </div>
 </template>
 
 <script>
@@ -108,8 +97,13 @@ import { INITIAL_EVENTS, createEventId } from '@/utils/eventUtils.js'
 // import ptLocale from '@fullcalendar/core/locales/pt-br';
 
 import Agenda from '@/controllers/Agenda.js'; 
- 
- const agenda = new Agenda();
+import Financeiro from '@/controllers/Financeiro.js';
+import Usuario from '@/controllers/Usuario.js';  /** REalizar consulta do email do usuario */
+import axios from 'axios';
+
+const agenda     = new Agenda();
+const usuario    = new Usuario();
+const financeiro = new Financeiro();
 
 export default defineComponent({
   components: {
@@ -120,6 +114,8 @@ export default defineComponent({
       
       dadosEvento: agenda.getDados(),
       agenda,
+      usuario,
+      financeiro,
       eventosBD : [],
 
       tituloNovoEvento:null,
@@ -128,7 +124,7 @@ export default defineComponent({
       modalNovoEventoOn: false,
       dadosNovoEvento: null,
       modoVisaoAtual: null,   /** Detectado em onViewChange() */
-
+      agendarTrimestre: false,
       cores: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
       calendarOptions: {
         // calendarLocale: ptLocale,
@@ -273,19 +269,39 @@ export default defineComponent({
       // You can perform actions based on the view type here
 
       if (viewInfo.view.type === 'timeGridDay') {  
-          alert('Visão de DAY !!!! ');
+          // alert('Visão de DAY !!!! ');
           this.modoVisaoAtual = "DIA";
       }
     }, 
 
     addEventoAPI( dadosEvento )  {
       
+        // alert("** Dados eventos: " + JSON.stringify( dadosEvento ) );
+
         // this.agenda.setDados( dadosEvento );
         this.agenda.cadastrarEvento( dadosEvento ).then(response => {
             // console.log('Cadastro Evento Response:', response);
             // alert( response.code + " ||| " + response.message );
             if ( response.code == 0 )      {
                  this.$bus.emit('showModal', { message: response.message, msgType: "success"} );
+                 
+                 /** Adiciona Dados Financeiros */
+                 /** Adiciona Dados Financeiros */
+                 /** Adiciona Dados Financeiros */
+                 const dataHraIni = dadosEvento.dataHoraInicio.slice(0, 19);
+                 var dadosFinanceiros = {
+                      "nome": dadosEvento.nomePaciente,
+                      "dataHoraInicio": dataHraIni
+                 };        
+                 //alert( "Data? " + JSON.stringify( dadosFinanceiros ) );
+                 const resp = this.financeiro.cadastrarFinanceiro( dadosFinanceiros );
+                 // alert( "REsponse? " + JSON.stringify( resp.data ) );
+                 /** Adiciona Dados Financeiros */
+                 /** Adiciona Dados Financeiros */
+                 /** Adiciona Dados Financeiros */
+
+                 // alert("SEND EMAIL!");
+                 // this.sendEmailAPI( dadosEvento );
             }
         }).catch(error => {
           console.error('Error creating user:', error);
@@ -324,43 +340,44 @@ export default defineComponent({
     },
     
     handleDatesSet() {
-      alert("Ok data sets");
+      // alert("Ok data sets");
     },
     handleWeekendsToggle() {
       this.calendarOptions.weekends = !this.calendarOptions.weekends // update a property
+    }, 
+    /** Dada um parâmetro de data inicial no formato dateIni = '2024-07-18',
+     * Gera um vetor com as 12 próximas datas com intervalo de 7 dias entre cada uma.
+     * Função usada para agendar um trimestre para um paciente. **/
+    gerarDatasTrimestre( dateIni )          {
+        let dates = [];
+        let currentDate = new Date(dateIni); // Convert input date string to Date object
+        dates.push(currentDate.toISOString().slice(0, 10)); // Push initial date to array
+
+        // Generate 11 more dates, each 7 days apart
+        for (let i = 1; i < 12; i++) {
+            currentDate.setDate(currentDate.getDate() + 7); // Add 7 days to current date
+            dates.push(currentDate.toISOString().slice(0, 10)); // Push formatted date string to array
+        }
+        // alert("DATAS GERADAS?!" + JSON.stringify(dates));
+        return dates;
     },
-    addEventoOLD()                  {
-      if ( this.tituloNovoEvento == null )  {
-           alert("Selecione o titulo do novo evento.");
-           return;
-      }
-      console.log("** Adicionando novo evento: " + JSON.stringify( this.dadosNovoEvento ));
-      // let calendarApi = this.dadosNovoEvento.view.calendar;
-      const calendarApi = this.$refs.calendarRef.getApi();
-      calendarApi.unselect() // clear date selection
+    addEventos()              {
       
-      let title = this.tituloNovoEvento;
-      if (title) {
-          calendarApi.addEvent({
-              id: createEventId(),
-              title,
-              start: this.dadosNovoEvento.startStr,
-              end: this.dadosNovoEvento.endStr,
-              color: this.cores[this.rnd(0, this.cores.length - 1)],
-              allDay: this.dadosNovoEvento.allDay
-          })
-      }
-      var evento = {
-          nomePaciente: this.tituloNovoEvento, 
-          dataHoraInicio: this.dadosNovoEvento.startStr,
-          dataHoraFim: this.dadosNovoEvento.endStr
-      }
-      this.addEventoAPI( evento );
-      this.modalNovoEventoOn = false;
+        // alert( this.agendarTrimestre );
+        if ( this.agendarTrimestre )    {
+             var datas = this.gerarDatasTrimestre( this.dadosNovoEvento.startStr );
+             for( var i=0; i<datas.length; i++ )   {
+                  this.dadosNovoEvento.startStr = datas[ i ];
+                  this.addEventoDia( true );
+             }
+        } else {
+          this.addEventoDia();
+        }
     },
-    addEvento()                  {
+    addEventoDia(isTrimestre = null)      {
       if ( this.tituloNovoEvento == null )  {
-           alert("Selecione o titulo do novo evento.");
+           // alert("Selecione o titulo do novo evento.");
+           this.$bus.emit('showModal', { message: "Selecione o titulo do novo evento.", msgType: "warning"} );
            return;
       }
       console.log("** Adicionando novo evento: " + JSON.stringify( this.dadosNovoEvento ));
@@ -410,15 +427,21 @@ export default defineComponent({
       console.log( "DATA INI = " + dateTimeIniObject + " || DATA FIM = " + dateTimeFimObject);
 
       /** Monta evento para back-end, e envia via API */
-      var evento = {
+      const evento = {
           nomePaciente: this.tituloNovoEvento, 
           dataHoraInicio: dateTimeIniObject,
           dataHoraFim: dateTimeFimObject,
           profissionalId: this.DADOS_USUARIO.id
       }
       this.addEventoAPI( evento );
+      if ( !isTrimestre )  {
+          // alert("CONSULTA UNICA");
+          this.sendEmailAPI( evento );
+      }
+
       this.modalNovoEventoOn = false;
     },
+    
     addListaEventos( events )                 {
       /*const events = [
         {
@@ -456,6 +479,62 @@ export default defineComponent({
     handleEvents(events) {
       this.currentEvents = events
     },
+
+    async sendEmailAPI( dadosEvento )    
+    {
+
+          //alert( "** Email para: " + JSON.stringify( dadosEvento ) );
+          //alert("** Paciente " + dadosEvento.nomePaciente );
+          const dataHoraConsulta = dadosEvento.dataHoraInicio.split("T");
+          //alert( "HORA!" + dataHoraConsulta[1] );
+          
+
+          const dados = {
+              "nome" : dadosEvento.nomePaciente
+          };
+          var response = await usuario.consultarUsuario( dados );
+          var emailDestino;
+          if ( response.code == 0 )   {
+               emailDestino = response.data.email;
+          }
+          
+          var sendData = {
+              destino: emailDestino,
+              assunto: "Consulta agendada (Psibetter) | 2023",
+              corpo: 
+              ` <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4; border-radius: 10px; max-width: 600px; margin: auto;">
+                    <h2 style="color: #333;">Consulta agendada com sr(a). ${this.DADOS_USUARIO.nome}</h2>
+                    <div style="background-color: #e0ffe0; padding: 20px;">
+                        Olá sr(a) ${dadosEvento.nomePaciente}, você possui uma nova consulta agendada em:
+                        <p style="margin: 0;">
+                          Data: ${dataHoraConsulta[0]}
+                        </p>
+                        <p style="margin: 0;">
+                        Horário: ${dataHoraConsulta[1]}
+                        </p>
+                    </div>
+                </div>`
+          }; 
+          // ------------ axios.post( this.$SERVICES_ENDPOINT_URL , sendData ) ------------ 
+          // axios.post( 'http://localhost/psibetter_backend/mailsender-api.php', sendData )
+          axios.post( 'http://184.72.238.232/psibetter/psibetter_backend/mailsender-api.php', sendData )
+              .then( response => {
+                      console.log('-Response EMAIL DATA == ' + JSON.stringify( response.data ) );
+                      var responseData = response.data;
+
+                      if ( responseData.code == '99' )      {
+                          //this.$bus.emit('showModal', "Erro ao enviar email: Entre em contato com nossa equipe." );
+                          this.$bus.emit('showModal', { message: "Erro ao enviar email: Entre em contato com nossa equipe." , msgType: "warning"} );
+                      }   else   {
+                          //this.$bus.emit('showModal', "Email enviado com sucesso. Confira sua caixa de entrada e spans." );
+                          this.$bus.emit('showModal', { message: "Email enviado com sucesso.", msgType: "success"} );
+
+                      }
+              })
+              .catch(error => {
+                    this.error = error.message;
+              });
+    }, 
   }
 })
 

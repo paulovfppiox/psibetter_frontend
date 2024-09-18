@@ -1,4 +1,4 @@
- import { createApp } from 'vue'
+import { createApp } from 'vue'
 import '@mdi/font/css/materialdesignicons.css'
 
 // Vuetify
@@ -76,3 +76,5 @@ app.use(store)
 app.use(vuetify)
 app.use(i18n)
 app.mount('#app')
+
+ 

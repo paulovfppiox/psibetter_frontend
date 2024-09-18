@@ -75,9 +75,11 @@
           // Current date
           const currentDate = new Date();
 
+          // alert( "Meu iD = " + this.DADOS_USUARIO.id );
+
           // Set iniDate to current date at midnight (00:00:00)
           const dataIni = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), -3, 0, 0);
-          const dataFim = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 19, 0, 0);
+          const dataFim = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 21, 0, 0);
           const profissionalId = this.DADOS_USUARIO.id;
 
           console.log("iniDate:", dataIni.toISOString());
@@ -86,12 +88,12 @@
           this.agenda.consultarEventos( dataIni, dataFim, profissionalId ).
           then(response => {
             console.log('Cadastro Evento de Agenda Response:', response);
-            //alert( response.code + " || " + response.message );
+            //alert( "Consultas dia!! " + response.code + " || " + response.message );
 
             if ( response.code == 0 )   {  
                  var responseData = response.data;
                  this.consultasData = responseData;
-                  // alert("DADOS TABLE?!? " + JSON.stringify( this.consultasData )); 
+                 // alert("DADOS TABLE?!? " + JSON.stringify( this.consultasData )); 
                  this.temConsultasHoje = true;
             }   else  {
                 this.temConsultasHoje = false;

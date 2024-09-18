@@ -1,9 +1,15 @@
 <template>
 
     <!--  DADOS?!?! {{ this.DADOS_USUARIO }} -->
-
-    <div style="background-color: lightgray;">
-        <h2>Instruções de Uso</h2>
+    <div class="instrucoes">
+    <v-expansion-panels>
+    <v-expansion-panel style="width:50%">
+        
+        <v-expansion-panel-title>
+            <h2>Instruções de Uso</h2>
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+        
         <br/>
         <p> Para adicionar uma nova consulta, basta selecionar a data desejada. </p>
         <p> Para deletar uma consulta, basta clicar sobre ela. </p>
@@ -15,8 +21,12 @@
         <br>
         <br>
         <h2> N° total de consultas agendadas: {{ currentEvents.length }} </h2>
-    </div>
-
+        <br>
+    
+      </v-expansion-panel-text>
+    </v-expansion-panel>
+    </v-expansion-panels>
+  </div>
 
     <!-- MENUS_PACIENTES_NOMES {{ JSON.stringify( MENUS_PACIENTES_NOMES ) }} 
     tituloNovoEvento {{ tituloNovoEvento }}    <br>
@@ -60,16 +70,35 @@
         </v-card>
     </v-dialog>
 
-    
+    <!-- 
+      <div v-if="this.IS_MOBILE">
+      CLASSES_BTN_DATA {{ this.CLASSES_NOVA_DATA }} 
+    -->
+
+    <div class="ma-5">
+      <v-row no-gutters class="align-center">
+          <v-col cols="12" md="5" :class="this.CLASSES_NOVA_DATA">
+            <label for="startDate">Data da nova consulta: </label>
+          </v-col>
+
+          <v-col cols="12" md="2" class="d-flex justify-center">
+            <input type="date" style="width: 100%;" class="campo-data" id="startDate" v-model="dataNovoEvento">
+          </v-col>
+
+          <v-col cols="12" md="5" :class="this.CLASSES_NOVA_DATA_BTN">
+            <v-btn density="comfortable" color="primary" @click="addEventosMobile">Adicionar Consulta</v-btn>
+          </v-col>
+      </v-row>
+    </div>
+    <!-- this.dataNovoEvento {{ this.dataNovoEvento }} T {{ this.horaIniNovoEvento }} -->
 
     <!-- calendarLocale {{  calendarOptions.calendarLocale }}
     :locale="calendarOptions.calendarLocale"
     -->
     <div class='demo-app-main' style="background-color: white"> 
       
-      <div class="visao-label">
-           Perspectiva
-      </div>
+    
+
       <FullCalendar
         class='demo-app-calendar'
         :options='calendarOptions'
@@ -118,6 +147,7 @@ export default defineComponent({
       financeiro,
       eventosBD : [],
 
+      dataNovoEvento:null,
       tituloNovoEvento:null,
       horaIniNovoEvento: null,
       horaFimNovoEvento: null,
@@ -172,13 +202,38 @@ export default defineComponent({
       },
       DADOS_USUARIO()  {
          return this.$store.state.user;
+      },
+      IS_MOBILE()   {
+        return ( document.documentElement.clientWidth < 620 ) ? true : false;
+      },
+      CLASSES_NOVA_DATA() {
+          // Caso mobile
+          if ( document.documentElement.clientWidth < 620 ) {
+               return "d-flex justify-center";           
+          }
+          return "d-flex justify-end";
+      },
+      CLASSES_NOVA_DATA_BTN() {
+          // Caso mobile
+          if ( document.documentElement.clientWidth < 620 ) {
+               return "d-flex justify-center";           
+          }
+          return "d-flex justify-start";
       }
+
+      
   },
 
-  created()       {
-  },
   mounted()       {
+
+      // alert("MOBILE?!? " + this.IS_MOBILE );
   
+      // Remove classes after the component is mounted
+      if ( this.IS_MOBILE )   {
+           this.$nextTick(() => {
+               this.removeToolbarClasses();
+           });
+      }
       
       /******************************* */
       // var dataIni = new Date("2024-04-14T00:00:00");
@@ -230,6 +285,20 @@ export default defineComponent({
     rnd (a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a
     },
+    /** Permite que o menu de botões interativos seja vertical e não horizontal */
+    removeToolbarClasses() {
+      // Access the FullCalendar component's DOM
+      const calendarEl = this.$refs.calendarRef.$el;
+      
+      // Use querySelector to find the div with the classes
+      const toolbarDivs = calendarEl.querySelectorAll('.fc-header-toolbar, .fc-toolbar, .fc-toolbar-ltr');
+      
+      toolbarDivs.forEach(div => {
+        // Remove the classes
+        div.classList.remove('fc-header-toolbar', 'fc-toolbar', 'fc-toolbar-ltr');
+      });
+      
+    },
     // Method to handle view change
     onViewChange(viewInfo)   {
 
@@ -259,8 +328,6 @@ export default defineComponent({
          break;
 
         }
-         
-        
     },
     onViewDay(viewInfo)   {
 
@@ -324,7 +391,7 @@ export default defineComponent({
         // alert("ADDD !!!!");
     },
 
-    /** Atualiza o evento !!!!!!! */
+    /** Atualiza o evento - na perspectiva do dia !!! */
     testeChange( eventData )      {
         // alert("*** CHANGE !!!! !!!! " + JSON.stringify( eventData ) ); 
 
@@ -360,6 +427,15 @@ export default defineComponent({
         }
         // alert("DATAS GERADAS?!" + JSON.stringify(dates));
         return dates;
+    },
+    addEventosMobile()        {
+      
+        if ( ( this.dataNovoEvento == "aaaa-mm-dd" ) || ( this.dataNovoEvento == undefined ) 
+               || ( this.dataNovoEvento == null ) ) {
+                alert("DATA INVALIDA");
+                return;
+        }
+        this.handleDateSelectMobile();
     },
     addEventos()              {
       
@@ -461,12 +537,91 @@ export default defineComponent({
       calendarApi.addEventSource(events); // Add new events
         
     }, 
-    handleDateSelect(selectInfo) {
-
+    handleDateSelect( selectInfo ) {
+      
+      console.log("- Novo evento data = " + JSON.stringify( selectInfo ) );
       this.modalNovoEventoOn = true;
       this.dadosNovoEvento = selectInfo;
-      
+
     },
+
+    /** Versão do mobile para adicionar um evento **/
+    handleDateSelectMobile()        {  
+
+      const dataIniFim = this.dataNovoEvento + "T00:00:00.000Z";
+
+      this.dadosNovoEvento = {
+          "start":dataIniFim,
+          "end":dataIniFim,
+          "startStr":this.dataNovoEvento,
+          "endStr":this.dataNovoEvento,
+          "allDay":true,
+          "jsEvent":{
+              "isTrusted":true
+          },
+          "view":{
+              "type":"dayGridMonth",
+              "dateEnv":{
+                "timeZone":"local",
+                "canComputeOffset":true,
+                "calendarSystem":{
+                    
+                },
+                "locale":{
+                    "codeArg":"en",
+                    "codes":[
+                      "en"
+                    ],
+                    "week":{
+                      "dow":0,
+                      "doy":4
+                    },
+                    "simpleNumberFormat":{
+                      
+                    },
+                    "options":{
+                      "direction":"ltr",
+                      "buttonText":{
+                          "prev":"prev",
+                          "next":"next",
+                          "prevYear":"prev year",
+                          "nextYear":"next year",
+                          "year":"year",
+                          "today":"today",
+                          "month":"month",
+                          "week":"week",
+                          "day":"day",
+                          "list":"list"
+                      },
+                      "weekText":"W",
+                      "weekTextLong":"Week",
+                      "closeHint":"Close",
+                      "timeHint":"Time",
+                      "eventHint":"Event",
+                      "allDayText":"all-day",
+                      "moreLinkText":"more",
+                      "noEventsText":"No events to display",
+                      "buttonHints":{
+                          "prev":"Previous $0",
+                          "next":"Next $0"
+                      },
+                      "viewHint":"$0 view",
+                      "navLinkHint":"Go to $0"
+                    }
+                },
+                "weekDow":0,
+                "weekDoy":4,
+                "weekText":"W",
+                "weekTextLong":"Week",
+                "cmdFormatter":null,
+                "defaultSeparator":" - "
+              }
+          }
+        };
+        // console.log("- Novo evento data = " + JSON.stringify( selectInfo ) );
+        this.modalNovoEventoOn = true;
+    },
+
     handleEventClick(clickInfo) {
 
       // alert( JSON.stringify( clickInfo.event ) );
@@ -548,34 +703,10 @@ h2 {
   margin: 0;
   font-size: 16px;
 }
-
-ul {
-  margin: 0;
-  padding: 0 0 0 1.5em;
-}
-
-li {
-  margin: 1.5em 0;
-  padding: 0;
-}
-
+  
 b { /* used for event dates/times */
   margin-right: 3px;
-}
-
-/* 
-MOBILE/TABLETS APP 
-  Aplica esse CSS, até o máximo de width=750px */
-  @media ( min-width: 768px )   
-{
-    .demo-app {
-      display: flex;
-      min-height: 100%;
-      font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-      font-size: 14px;
-      background-color: rgb(224, 60, 9);
-    }
-}
+} 
 
 
 .demo-app {
@@ -585,17 +716,7 @@ MOBILE/TABLETS APP
   font-size: 14px;
   background-color: lightblue;
 }
-
-.demo-app-sidebar {
-  width: 300px;
-  line-height: 1.5;
-  background: #eaf9ff;
-  border-right: 1px solid #d3e2e8;
-}
-
-.demo-app-sidebar-section {
-  padding: 2em;
-}
+ 
 
 .demo-app-main {
   flex-grow: 1;
@@ -613,4 +734,45 @@ MOBILE/TABLETS APP
   font-size: 13px;
   font-weight: bold;
 }
+
+.instrucoes {
+  background-color: #e8e8e8;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+/* ###################################################### */
+
+
+/* Default styles for larger screens */
+.demo-app-main {
+  background-color: white;
+  padding: 10px; /* Add some padding around the calendar */
+}
+
+.demo-app {
+  width: 100%; /* Make sure the calendar takes up the full width */
+  height: 600px; /* Set a default height */
+}
+
+/* Styles specifically for mobile devices */
+@media (max-width: 768px) {
+  .demo-app {
+    height: 400px; /* Adjust the height for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .demo-app {
+    height: 300px; /* Further adjustment for very small screens */
+  }
+}
+
+/* Optional: Adjust padding or margins on mobile */
+@media (max-width: 768px) {
+  .demo-app-main {
+    padding: 5px;
+  }
+}
 </style>
+

@@ -198,6 +198,76 @@ export const ListasMixin = {
           "Xarope de Codeína",
           "Nenhuma"
         ],
+
+        medicacoes : [
+          // ANTIDEPRESSIVO
+          "Agomelatina",
+          "Amoxapina",
+          "Amitriptyline",
+          "Bupropiona",
+          "Citalopram",
+          "Clomipramina",
+          "Desipramina",
+          "Desvenlafaxina",
+          "Doxepina",
+          "Duloxetina",
+          "Escitalopram",
+          "Fluoxetina",
+          "Fluvoxamina",
+          "Imipramina",
+          "Mirtazapina",
+          "Nortriptilina",
+          "Paroxetina",
+          "Protriptilina",
+          "Selegilina",
+          "Sertralina",
+          "Trazodona",
+          "Trimipramina",
+          "Venlafaxina",
+          "Vilazodona",
+          "Vortioxetina",
+        
+          // ANSIOLÍTICOS
+          "Alprazolam",
+          "Buspirona",
+          "Clonazepam",
+          "Clobazam",
+          "Diazepam",
+          "Lorazepam",
+          "Oxazepam",
+        
+          // ANTICONV. / ESTAB. HUMOR
+          "Fenitoína",
+          "Fosfenitoína",
+          "Lamotrigina",
+          "Oxcarbazepina",
+          "Ácido valproico",
+          "Brivaracetam",
+          "Carbamazepina",
+          "Fenobarbital",
+          "Lítio",
+        
+          // ANTIPSICÓTICOS
+          "Aripiprazol Lauroxil",
+          "Asenapina",
+          "Brexpiprazol",
+          "Flufenazina",
+          "Haloperidol",
+          "Lurasidona",
+          "Perfenazina",
+          "Quetiapina",
+          "Amissulprida",
+          "Aripiprazol",
+          "Clozapina",
+          "Iloperidona",
+          "Olanzapina",
+          "Paliperidona",
+          "Pimozida",
+          "Risperidona",
+          "Ziprasidona",
+          "Zuclopentixol",
+          "Tioridazina"
+        ]
           
       };
     },

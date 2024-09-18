@@ -1,10 +1,12 @@
 <template>
-    
-    <v-container id="relatorioPDF" style="background-color: #DCEDC8;" >
+    <!-- #DCEDC8 -->
+    <v-container id="relatorioPDF" >
     
     <h1 class="text-h5 text-lg-h5 mb-5 mt-5" style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
       <b> Histório de Consultas  </b>
     </h1>
+    <p> Nesta página, consulte o histórico de registros de consultas realizadas por mês/ano.</p>
+
 
     <!-- 
       formValido? {{  formValido  }} 
@@ -13,19 +15,22 @@
       senha {{ SENHA }} 
       -->
 
-        <v-form class="mt-5" v-model="this.formValido" style="background-color: #DCEDC8" ref="form">
+        <v-form class="mt-5" v-model="this.formValido" ref="form">
           
             <!-- NOME {{ historico.nomePaciente }}
             mes {{ historico.mes  }} -->
-         
-            <!-- ========================== LINHA 1================================ -->
-            <v-row>
-            <v-col cols="12" md="6">
+            
+          <!-- =======================  LINHA BOTÃO  ======================== -->
+          <v-row>
+              <v-col cols="12" md="4">
+              </v-col>
+
+              <v-col cols="12" md="4">
+
                 <v-combobox
                     v-model="this.historico.nomePaciente"
                     :rules="nomePacienteRules"
                     :items="this.MENUS_PACIENTES_NOMES"
-                    style="width:90%;"
                     prepend-inner-icon="mdi-account"
                     label="Nome do Paciente*"
                     bg-color="white"
@@ -34,9 +39,7 @@
                     density="comfortable"
                     required
                 ></v-combobox>
-            </v-col>
-
-            <v-col cols="12" md="6">
+            
                 <div style="display: flex; justify-content: center; margin-right: 10px;"> 
                 <v-combobox
                     v-model="this.historico.mes"
@@ -67,17 +70,6 @@
                 ></v-combobox>
                 </div>
 
-                
-
-            </v-col>
-          </v-row>
- 
-          <!-- =======================  LINHA BOTÃO  ======================== -->
-          <v-row>
-              <v-col cols="12" md="4">
-              </v-col>
-
-              <v-col cols="12" md="4">
                   <v-btn
                     color="secondary"
                     append-icon="mdi-database-arrow-up"
@@ -249,7 +241,9 @@ export default {
 
                     // 2- Selecionar apenas consultas cujo status seja realizada.  
                     this.consultasFiltradas = this.consultasFiltradas.filter(obj => obj.statusContulta === "realizada");
-                    console.log("Array OK?!? " + JSON.stringify( this.consultasFiltradas ));
+                    // console.log("Array OK?!? " + JSON.stringify( this.consultasFiltradas ));
+                    if ( this.consultasFiltradas == "" ) 
+                         this.$bus.emit('showModal', { message: "Não foram encontrados registro de consultas para o período desejado." , msgType: "warning"} );
                     
                 }   else  {
                     this.$bus.emit('showModal', { message: "Não foram encontrados registro de consultas para o período desejado." , msgType: "warning"} );

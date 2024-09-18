@@ -115,7 +115,7 @@ export default {
     /** Data e hora da consulta */
     dataBR: '',
     horaIni: '',
-
+    
     dadosFichario :  {
         id: "",
         nomePaciente  : "",
@@ -127,7 +127,8 @@ export default {
         statusContulta	 : null, 			
         intervencoes	   : "",
         planoIntervencoes : ""
-     },
+    },
+    
   }),
   methods:  {
 

@@ -1,6 +1,6 @@
 <template>
     
-    <v-container style="background-color: #DCEDC8" >
+    <v-container style="background-color: #f0f0f0; width:80%" >
    
     <div class="titulo-form-container">  
        <label style="font-size: 15px;">  Dados Gerais do Paciente  </label>
@@ -12,7 +12,7 @@
      PATH_ATUAL {{  PATH_ATUAL  }}
     dadosUsuario {{ JSON.stringify( dadosUsuario ) }} -->
     
-    <v-form class="mt-5" v-model="formValido" style="background-color: #DCEDC8" ref="form">
+    <v-form class="mt-5" v-model="formValido" style="background-color: #f0f0f0" ref="form">
           <v-row>
             
             <v-col cols="12" md="4">
@@ -22,7 +22,6 @@
                  :rules="nomeRules"
                  prepend-inner-icon="mdi-account"
                  hint="Informe seu nome completo"
-                 max-width="400px"
                  :counter="100"
                  label="Nome*"
                  :bg-color="camposBgColor"
@@ -38,7 +37,6 @@
                   v-model="dadosUsuario.genero"
                   :items="generos"
                   :rules="generoRules"
-                  max-width="400px"
                   label="Gênero*"
                   :bg-color="camposBgColor"
                   density="comfortable"
@@ -58,7 +56,6 @@
                   prepend-inner-icon="mdi-history"
                   hint="Informe idade"
                   type='number'
-                  max-width="400px"
                   :counter="3"
                   label="Idade*"
                   :bg-color="camposBgColor"
@@ -79,7 +76,6 @@
                   prepend-inner-icon="mdi-phone"
                   hint="Informe telefone fixo"
                   type='number'
-                  max-width="400px"
                   :counter="8"
                   label="Telefone"
                   :bg-color="camposBgColor"
@@ -96,7 +92,6 @@
                   prepend-inner-icon="mdi-cellphone-basic"
                   hint="Informe celular"
                   type='number'
-                  max-width="400px"
                   :counter="15"
                   label="Celular (Com DDD, apenas dígitos)*"
                   :bg-color="camposBgColor"
@@ -113,7 +108,6 @@
                   :rules="emailRules"
                   prepend-inner-icon="mdi-email"
                   hint="Informe email"
-                  max-width="400px"
                   :counter="30"
                   label="Email*"
                   :bg-color="camposBgColor"
@@ -130,7 +124,6 @@
                   <v-autocomplete
                     v-model="dadosUsuario.profissao"
                     :items="this.profissoesItems"
-                    max-width="400px"
                     label="Profissão"
                     :bg-color="camposBgColor"
                     density="comfortable"
@@ -147,7 +140,6 @@
                     v-model="dadosUsuario.tipoPagamento"
                     :rules="tipoPagamentoRules"
                     :items="this.pagamentoItems"
-                    max-width="400px"
                     label="Tipo de Pagamento de Consultas"
                     :bg-color="camposBgColor"
                     density="comfortable"

@@ -1,6 +1,6 @@
 <template>
   
-  <v-container style="background-color: #DCEDC8" >
+  <v-container style="background-color: #f0f0f0; width:80%" >
     
     <div class="titulo-form-container">  
       <label style="font-size: 15px;">  Dados Clínicos </label>´
@@ -10,7 +10,7 @@
    <!-- formReadonly ?!? {{  formReadonly  }} <br>
     formValido {{ formValido }} -->
 
-  <v-form v-model="formValido" style="background-color: #DCEDC8" ref="form">
+  <v-form v-model="formValido" style="background-color: #f0f0f0" ref="form">
 
         <!--- #####################################  LINHA 1  ########################################## -->
         <div class="mb-2" style="text-align: left;">I. Medicamentos, substâncias e comportamentos </div>
@@ -19,7 +19,7 @@
           <!-- NOTA!! NOTA!! hide-details: esconde o detalhe de validação do Campo !!!!  -->
               <v-combobox
               v-model="dadosClinicos.medicacoesEmUso"
-              :items="medicamentosItems" 
+              :items="medicacoes" 
               :rules="formReadonly ? [] : medicamentosRules"
               prepend-inner-icon="mdi-pill-multiple"
               label="Medicações*"
@@ -76,7 +76,7 @@
 
           <v-container class="horizontal-checkboxes">
                 <v-checkbox
-                  style="font-size: 10px; margin-top: 20px; color:black"
+                  style="font-size: 10px; margin-top: 30px; color:black"
                   v-model="dadosClinicos.bebe"
                   label="Bebe?"
                   value="1"
@@ -85,7 +85,7 @@
                 ></v-checkbox>
                 
                 <v-checkbox
-                  style="font-size: 10px; margin-top: 20px; color:black"
+                  style="font-size: 10px; margin-top: 30px; color:black"
                   v-model="dadosClinicos.fuma"
                   label="Fuma?"
                   :readonly="formReadonly"
@@ -99,7 +99,7 @@
 
           <v-col cols="12" md="4">
             <v-checkbox
-                  style="font-size: 10px; margin-top: 20px"
+                  style="font-size: 10px; margin-top: 30px"
                   v-model="dadosClinicos.atividadeFisica"
                   label="Atividade Física?"
                   :readonly="formReadonly"
@@ -259,9 +259,10 @@
 <script>
 /* eslint-disable */
 import MyChecklistIcon from '@/components/MyChecklistIcon.vue';
-
+import ListasMixin  from '@/utils/ListasMixin.js'; 
 import axios from 'axios';
- export default {
+export default           {
+    mixins: [ListasMixin],
      props: {
             idUsuario: Number,  
             shareData: Boolean,

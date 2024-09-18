@@ -16,12 +16,16 @@ VER ISSO DEPOIS -->
 <!--- VER ISSO DEPOIS -->
 <!--- VER ISSO DEPOIS -->
 
-    <v-btn size="small" @click="exportToPDF" style="margin-top:5px" 
-         append-icon="mdi-file">
-      
-      Donwload Relatório
+    
+    <v-btn v-if="( this.PATH_ATUAL == 'receituario')" @click="exportToPDF" style="margin-top:5px" append-icon="mdi-file">
+      Emitir Receita
     </v-btn>
 
+    <v-btn v-else size="small" @click="exportToPDF" style="margin-top:5px" append-icon="mdi-file">
+      Download Relatório
+    </v-btn>
+
+    
 
     <!-- <v-btn @click="exportToPDF" style="margin-top:5px">
           <i class="fa-solid fa-file-pdf"></i> Download Relatório
@@ -43,6 +47,13 @@ export default {
       type: String,
       required: true
   },
+  computed: {
+
+      PATH_ATUAL()
+      {
+          return this.$route.name;
+      },
+  }, 
   methods: {
     exportToPDF() {
 

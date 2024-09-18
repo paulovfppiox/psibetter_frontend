@@ -183,7 +183,7 @@
                           </p>
                           <div style="background-color: #e0ffe0; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 20px 0;">
                               <p style="margin: 0;">
-                                  <a href="http://paivaservices.com/psibetter/redefine-senha.html?data=${encodeURIComponent(this.email)}" target="_blank" style="color: #007bff; text-decoration: none; font-weight: bold; font-size: 18px;">
+                                  <a href="https://paivaservices.com/psibetter/redefine-senha.html?data=${encodeURIComponent(this.email)}" target="_blank" style="color: #007bff; text-decoration: none; font-weight: bold; font-size: 18px;">
                                       Redefinir Senha
                                   </a>
                               </p>

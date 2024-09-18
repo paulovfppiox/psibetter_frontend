@@ -4,6 +4,7 @@ import LoginPage from '@/pages/LoginPage.vue'
  import HomePage from '@/pages/HomePage.vue'
 import MeusPacientesPage from '@/pages/MeusPacientesPage.vue'
 import RegistroUsuarioPage from '@/pages/RegistroUsuarioPage.vue'
+import RegistroPacientePage from '@/pages/RegistroPacientePage.vue'
 import NovaSenhaPage from '@/pages/NovaSenhaPage.vue'
 import MinhaContaPage from '@/pages/MinhaContaPage.vue'
 import AgendaPage from '@/pages/AgendaPage.vue'
@@ -11,6 +12,9 @@ import ConsultaProntuarioPage from '@/pages/ConsultaProntuarioPage.vue'
 import FicharioConsultasPage from '@/pages/FicharioConsultasPage.vue'
 import HistoricoConsultasPage from '@/pages/HistoricoConsultasPage.vue'
 import FinanceiroPage from '@/pages/FinanceiroPage.vue'
+import ReceituarioPage from '@/pages/ReceituarioPage.vue'
+import PainelPage from '@/pages/PainelPage.vue'
+import Website from '@/pages/WebSite.vue'
 
 const routes = [
     { 
@@ -69,6 +73,26 @@ const routes = [
       name: 'financeiro',
       component: FinanceiroPage
     },
+    { 
+      path: '/receituario', 
+      name: 'receituario',
+      component: ReceituarioPage
+    },
+    { 
+      path: '/painel', 
+      name: 'painel',
+      component: PainelPage
+    },
+    { 
+      path: '/registro-paciente', 
+      name: 'registro-paciente',
+      component: RegistroPacientePage
+    },
+    { 
+      path: '/servicos', 
+      name: 'servicos',
+      component: Website
+    }, 
 ]
 
 /*

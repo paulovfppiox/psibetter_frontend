@@ -131,6 +131,18 @@ const TAM_MINIMO_SENHA = 10;
           return width * 0.3 + 'px'; 
       }
     },
+    mounted()   {
+        /*if ( !this.USUARIO_AUTENTICADO ) 
+        {    
+             if ( (  this.PATH_ATUAL != "registro-usuario" ) || (  this.PATH_ATUAL == undefined )  )  { 
+                   // alert("indo login");
+                   this.$router.push({ path: '/servicos', replace:true  });
+             } 
+             if ( this.IS_REGISTRAR_USUARIO )  { 
+                  this.$router.push({ path: '/registro-usuario', replace:true  });
+             }
+        }*/
+    },
     methods:                      {
       
       handleTimeSelected( time ) 
@@ -149,8 +161,8 @@ const TAM_MINIMO_SENHA = 10;
         
       async loginAPI()         {
   
-          var cifrada = this.cifraSenha( "PAULO PAIVA" );
-          var nome = this.decifraSenha( cifrada );
+          // var cifrada = this.cifraSenha( "PAULO PAIVA" );
+          // var nome = this.decifraSenha( cifrada );
 
           var sendData = {
               data:  {

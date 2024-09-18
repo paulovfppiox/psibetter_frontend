@@ -1,5 +1,5 @@
 // exampleMixin.js
- 
+ import axios from 'axios';
 
 /* eslint-disable */
 export const UtilsMixin = {
@@ -185,12 +185,87 @@ export const UtilsMixin = {
 
         convertUSToBRDate( usDateString ) 
         {
-            const parts  =  usDateString.split("-");
-            const day    =  parts[2];
-            const month  =  parts[1];
-            const year   =  parts[0];
-            return `${day}/${month}/${year}`;
+            if ( usDateString != null )   {
+                 const parts  =  usDateString.split("-");
+                 const day    =  parts[2];
+                 const month  =  parts[1];
+                 const year   =  parts[0];
+                 return `${day}/${month}/${year}`;
+            }
+            return '-';
         },
+
+        convertBRToUSDate(brDateString) 
+        {
+          if ( ( brDateString != null ) && ( brDateString != '-' ) )   {
+               // Split the Brazilian date string into parts
+               const parts = brDateString.split("/");
+               const day = parts[0];
+               const month = parts[1];
+               const year = parts[2];
+               // Return the date in USA format (MM-DD-YYYY)
+               return `${year}-${month}-${day}`;
+          }
+          return '-';
+        },
+
+        async consultaIDPacienteByNome( usuarioObj, nomePaciente )  {
+           /** 3- Consultar o ID do usuário selecionado */
+              const dados = {
+                "nome" : nomePaciente
+            };
+            var resp = await usuarioObj.consultarUsuario( dados );
+            var idPaciente;
+            if ( resp.code == 0 )      {
+                 idPaciente = resp.data.id;
+                 // alert("Nome: " + nomePaciente + " || ID = " +  idPaciente );
+            }
+            return idPaciente;
+        },
+        async consultaPacienteByNome( usuarioObj, nomePaciente )  {
+          /** 3- Consultar o ID do usuário selecionado */
+             const dados = {
+               "nome" : nomePaciente
+           };
+           var resp = await usuarioObj.consultarUsuario( dados );
+           
+           if ( resp.code == 0 )      {
+                return resp.data;
+           }
+           return false;
+        },
+        async consultaDadosUsuario( userEmail )  
+        {
+          
+            var sendData = {
+                data:  {
+                    entity: 'usuarios',
+                    operation: 'consultar',
+                    object: {
+                        email: userEmail  
+                    }
+                }
+            };
+          
+            axios.post( this.$SERVICES_ENDPOINT_URL , sendData )
+             .then( response => {
+               // console.log('-Response DATA Email ?!? == ' + JSON.stringify( response.data ) );
+                var responseData = response.data;
+
+                if ( responseData.code == '0' )      {
+                     var dadosUser = responseData.data;
+                     //console.log("-- Dados User complet? " + JSON.stringify( dadosUser ));
+                     this.$store.commit( 'setUser', dadosUser );
+                }
+            })
+        },
+        validaData( data )              {
+          if ( (data == "0000-00-00" ) || ( data == "00/00/0000" ) ||  (data == null ) || 
+               ( data == "dd/mm/aaaa" ) ||  ( data == "" ) )  {
+                 return false;
+          }
+          return true;
+        }
     },
     created()           {
         // alert("Mixin's created hook called !!!!!!!");

@@ -1,6 +1,6 @@
 <template>
     
-    <v-container style="background-color: #DCEDC8;" >
+    <v-container class="mt-10" style="background-color: #f0f0f0; width:80%" >
     
     <div class="titulo-form-container">  
 
@@ -17,7 +17,7 @@
     email {{ DADOS_USUARIO.email }}
     senha {{ SENHA }} -->
 
-    <v-form class="mt-5" v-model="this.formValido" style="background-color: #DCEDC8" ref="form">
+    <v-form class="mt-5" v-model="this.formValido" style="background-color: #f0f0f0" ref="form">
 
           <v-row>
             <v-col cols="12" md="4" >
@@ -26,7 +26,6 @@
                   :rules="emailRules"
                   prepend-inner-icon="mdi-email"
                   hint="Informe email"
-                  max-width="400px"
                   :counter="8"
                   label="Email*"
                   bg-color="white"
@@ -56,7 +55,6 @@
                   v-model="this.dadosMinhaConta.dadosUsuario.telefone"
                   prepend-inner-icon="mdi-phone"
                   hint="Informe telefone fixo"
-                  max-width="400px"
                   :counter="8"
                   label="Telefone"
                   bg-color="white"
@@ -77,7 +75,6 @@
                   :rules="celularRules"
                   prepend-inner-icon="mdi-cellphone-basic"
                   hint="Informe celular"
-                  max-width="400px"
                   :counter="8"
                   label="Celular*"
                   bg-color="white"
@@ -128,7 +125,6 @@
                   prepend-inner-icon="mdi-history"
                   hint="Informe idade"
                   type='number'
-                  max-width="400px"
                   :counter="3"
                   label="Idade*"
                   bg-color="white"
@@ -143,7 +139,6 @@
                   v-model="this.dadosMinhaConta.dadosUsuario.genero"
                   :items="this.generos"
                   :rules="generoRules"
-                  max-width="400px"
                   label="Gênero*"
                   bg-color="white"
                   density="comfortable"
@@ -176,7 +171,6 @@
                       v-model="this.dadosMinhaConta.dadosProfissionais.instituicao"
                       :items="this.instituicaoItems"
                       :rules="instituicaoRules"
-                      max-width="400px"
                       label="Instituição de Formação*"
                       bg-color="white"
                       chips
@@ -194,7 +188,6 @@
                   v-model="this.dadosMinhaConta.dadosProfissionais.curso"
                   :rules="cursoRules"
                   prepend-inner-icon="mdi-cellphone-basic"
-                  max-width="400px"
                   :counter="8"
                   label="Curso de Formação*"
                   bg-color="white"
@@ -229,7 +222,6 @@
                       v-model="this.dadosMinhaConta.dadosProfissionais.especialidade"
                       :items="especializacaoItems"
                       :rules="especialidadeRules"
-                      max-width="400px"
                       label="Especialidade*"
                       bg-color="white"
                       density="comfortable"
@@ -264,7 +256,6 @@
                     prepend-inner-icon="mdi-currency-usd"
                     hint="Informe ano de concliusão"
                     type="number"
-                    max-width="400px"
                     :counter="8"
                     label="Valor da consulta"
                     bg-color="white"

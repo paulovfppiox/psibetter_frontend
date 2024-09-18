@@ -86,17 +86,23 @@ import axios from 'axios';
 
             for (let i = 0; i < totalFiles; i++) {
                 const file = this.files[i];
-                const originalFileName = file.name;
+                var originalFileName = file.name;
 
-                // Check if the file name matches "comprovante"
+                /*/ Check if the file name matches "comprovante"
                 if (!originalFileName.toLowerCase().startsWith("comprovante")) {
                     alert('Apenas arquivos nomeados com "comprovante" são permitidos.');
                     this.$refs.filesRef.value = ''; // Clear the input field
                     return; // Stop further processing
-                }
+                }*/
+
+                var tipo = file.type;
+                tipo = tipo.replace("image/", "");
+
+                //alert( "FILENAME?!? " + originalFileName + " - " + tipo );
+                originalFileName = "comprovante";
 
                 // Create a new File object with the new name
-                const newFileName = `${baseName}_${originalFileName}`;
+                const newFileName = `${baseName}_${originalFileName}.${tipo}`;
                 const renamedFile = new File([file], newFileName, { type: file.type });
 
                 // Append the renamed file to FormData
@@ -146,16 +152,9 @@ import axios from 'axios';
 
             // alert( "USER_ID : " + this.DADOS_USUARIO.id );
             
-            var URL = '';
+            var URL = 'https://paivaservices.com/psibetter/financeiro/upload.php/';
             
-            /* Upload da imagem do usuário */
-            if ( this.PATH_ATUAL == 'home' )    {
-                 URL = 'http://184.72.238.232/psibetter/usuarios/upload_img.php/';
-                
-            /* Upload de comprovantes de pagamento */     
-            } else {
-                URL = 'http://184.72.238.232/psibetter/financeiro/upload.php/';
-            }
+             
 
             console.log( "-- url = " + URL );
 

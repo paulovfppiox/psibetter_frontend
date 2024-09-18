@@ -1,9 +1,9 @@
 <template>
  
    <!-- APLICAR_FUNDO_LOGIN {{ APLICAR_FUNDO_LOGIN }} -->
-  
+     
    <!-- <v-app id="inspire" style="background-color:#b0ff91"> -->
-   <v-app id="inspire" :class="{ 'app-background': APLICAR_FUNDO_LOGIN }" style="background-color:#cdfcbb">
+   <v-app id="inspire" :class="{ 'app-background': APLICAR_FUNDO_LOGIN }" style="background-color:#e6f2dc">
     
    <!--  overlayOn {{ overlayOn }}
     loadingOn {{ loadingOn }} -->
@@ -19,11 +19,11 @@
            @on-reject-modal="handleRejectModal()"
            @on-confirm-modal="handleConfirmModal()">
     </MyModal>
-
+  
     <v-main>
           <MenuBar v-if="this.USUARIO_AUTENTICADO"/>
           <MyConectionTime />
-          <RouterView /> 
+          <RouterView />
     </v-main>
   </v-app>
 </template>
@@ -39,6 +39,8 @@ import MyLoadingOverlay from './components/MyLoadingOverlay.vue'
 import LoginPage from './pages/LoginPage.vue'
 import RegistroUsuarioPage from './pages/RegistroUsuarioPage.vue'
 import UtilsMixin   from '@/utils/UtilsMixin.js';
+
+import WebSite   from '@/pages/WebSite.vue';
  
 export default {
   mixins: [UtilsMixin],
@@ -51,7 +53,8 @@ export default {
     LoginPage,
     MyModal,
     RegistroUsuarioPage,
-    MyLoadingOverlay
+    MyLoadingOverlay,
+    WebSite
   },
    
   data()            {
@@ -80,9 +83,12 @@ export default {
       {
           return this.$route.name;
       },
+      PATH_ATUAL_PARAM()      {
+        return this.$route.query.page; // 'default' is a fallback value
+      },
       APLICAR_FUNDO_LOGIN()
       {
-          return ( ( this.$route.name == 'login' ) || ( this.$route.name == 'registro-usuario' ) )
+          return ( ( this.$route.name == 'login' ) || ( this.$route.name == 'registro-usuario' ) || ( this.$route.name == 'registro-paciente' ) )
       },
       IS_REGISTRAR_USUARIO()
       {
@@ -93,7 +99,7 @@ export default {
   },
   created()             {
   },
-  mounted()                   { 
+  mounted()             { 
  
         /** --------- show modal - show modal - show modal - show modal --------- */
         /** --------- show modal - show modal - show modal - show modal --------- */
@@ -112,19 +118,21 @@ export default {
         this.$bus.on('showLoadingOverlay', ( loadingOn  ) => { 
             this.loadingOn = loadingOn;  
         })
-
-        if ( !this.USUARIO_AUTENTICADO ) 
-        {     
-             if ( (  this.PATH_ATUAL != "registro-usuario" ) || (  this.PATH_ATUAL == undefined ) )  { 
+        // console.log("PATH = " + this.PATH_ATUAL );
+        
+        this.$router.push({ path: '/servicos', replace:true  });
+        
+        /* if ( !this.USUARIO_AUTENTICADO ) 
+        {    
+             if ( (  this.PATH_ATUAL != "registro-usuario" ) || (  this.PATH_ATUAL == undefined )  )  { 
                    // alert("indo login");
                    this.$router.push({ path: '/login', replace:true  });
              } 
              if ( this.IS_REGISTRAR_USUARIO )  { 
                   this.$router.push({ path: '/registro-usuario', replace:true  });
              }
-       }
-   },
-   
+        }*/
+   },   
    methods: {
       checaAutenticacao() 
       {

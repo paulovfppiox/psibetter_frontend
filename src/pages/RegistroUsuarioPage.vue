@@ -2,6 +2,39 @@
 
 <!-- VALIDO ?!?!?!? {{ valid  }}
 concordoTermosDeUso {{  concordoTermosDeUso  }} -->
+<!-- ############################ MODAL MODAL ############################# -->
+<!-- ############################ MODAL MODAL ############################# -->
+<!-- ############################ MODAL MODAL ############################# -->
+<!-- ############################ MODAL MODAL ############################# -->
+<!-- ############################ MODAL MODAL ############################# -->
+<!-- ############################ MODAL MODAL ############################# -->
+<!-- ############################ MODAL MODAL ############################# -->
+
+
+<v-dialog v-model="perfilModal" persistent class="profile-dialog" >
+    <v-card>
+      <v-card-title>
+        <span class="headline">Qual o seu perfil de usuário?</span>
+      </v-card-title>
+
+      <v-card-actions>
+        <v-btn color="green" @click="selectProfile('Profissional')" variant="tonal">
+          Profissional
+        </v-btn>
+        <v-btn color="grey" @click="selectProfile('Paciente')" variant="tonal">
+          Paciente
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- ######################################################################### -->
+  <!-- ######################################################################### -->
+  <!-- ######################################################################### -->
+  <!-- ######################################################################### -->
+  <!-- ######################################################################### -->
+  <!-- ######################################################################### -->
+  <!-- ######################################################################### -->
 
 <div class="margin-top-login"> 
 
@@ -193,7 +226,7 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
  import axios from 'axios';
  import UtilsMixin   from '@/utils/UtilsMixin.js';
  import RulesFactory from '@/utils/RulesFactory.js';
-
+ 
  export default {
  mixins: [UtilsMixin],
       props: 
@@ -219,8 +252,7 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
         
         senhaVisivel: false,
         senhaConfirma: '',
-        
-        
+        perfilModal: true,
     }),
     computed:    {      
       CARD_MAX_WIDTH()           {
@@ -241,10 +273,19 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
           this.loadRules();
     },
     methods: {
-      async loadRules()     {
+      async loadRules()         {
             this.rules = await RulesFactory.loadRules( this.$options.name );
       },
-      async validate()      {
+      selectProfile(profile)    {
+          
+          if ( profile == "Paciente" )  {
+               this.$router.push({ path: '/registro-paciente', replace:true  });
+               this.perfilModal = false;
+          } else {
+            this.perfilModal = false;
+          }
+      },
+      async validate()          {
           const { valid } = await this.$refs.form.validate()
 
           if (valid)  { 
@@ -326,11 +367,17 @@ concordoTermosDeUso {{  concordoTermosDeUso  }} -->
  .margin-top-login {
       margin-top: 3%;
       margin-bottom: 3%;
-    }
+  } 
+  .profile-dialog {
+      width: 30%;
+  }
   @media ( max-width: 768px )   
   {
     .margin-top-login {
       margin-top: 30%;
+    }
+    .profile-dialog {
+      width: 100%;
     }
   }
  </style>

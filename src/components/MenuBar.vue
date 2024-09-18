@@ -81,7 +81,6 @@
             <v-tooltip text="Home">
             <template v-slot:activator="{ props }">
                 <v-list-item 
-                  
                   v-bind="props"
                   prepend-icon="mdi-home-city" 
                   title="Home"
@@ -133,9 +132,18 @@
              </template>
           </v-tooltip>
 
-          <v-list-item prepend-icon="mdi-file-document-edit" 
-              title="Receituário" @click="showMsg">
-            </v-list-item>   
+          <v-tooltip text="Receituário"> 
+            <template v-slot:activator="{ props }">
+                <v-list-item 
+                  v-bind="props"
+                  prepend-icon="mdi-file-document-edit" 
+                  value="account" 
+                  title="Receituário" 
+                  to="/receituario"
+                  @click.stop="rail = !rail" >
+                </v-list-item>
+             </template>
+          </v-tooltip>
     
             <v-tooltip text="Financeiro"> 
             <template v-slot:activator="{ props }">
@@ -149,6 +157,33 @@
                 </v-list-item>
              </template>
           </v-tooltip>
+
+
+          <v-tooltip text="Painel"> 
+            <template v-slot:activator="{ props }">
+                <v-list-item 
+                  v-bind="props"
+                  prepend-icon="mdi-monitor-dashboard" 
+                  value="account" 
+                  title="Painel" 
+                  to="/painel"
+                  @click.stop="rail = !rail" >
+                </v-list-item>
+             </template>
+          </v-tooltip>
+
+
+          <v-tooltip text="Tutoriais"> 
+            <template v-slot:activator="{ props }">
+                <v-list-item href="https://paivaservices.com/psibetter/tutoriais-psibetter.html" target="_blank"
+                  v-bind="props"
+                  prepend-icon="mdi-cast-education" 
+                  value="account" 
+                  title="Tutoriais" 
+                  @click.stop="rail = !rail" >
+                </v-list-item>
+             </template>
+          </v-tooltip>
             
 
         </v-list>
@@ -157,8 +192,8 @@
       <!-- drawer {{ drawer }}
       rail {{ rail }} -->
 
-    <!-- <v-app-bar  style="background-color: lightgreen;"> -->
-    <v-app-bar  style="background-color: #95f279;">
+    
+    <v-app-bar  style="background: linear-gradient(to left, #5a9e00, #b2e48a);"> 
       <v-app-bar-nav-icon @click="this.drawer = !this.drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title style="text-align: left;"> Psibetter® </v-app-bar-title>
@@ -253,4 +288,8 @@ import MySimpleUpload  from '@/components/MySimpleUpload.vue';
       font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
       font-size: 15px;
   }
+
+.gradiente {
+  background: linear-gradient(to left, #5a9e00, #b2e48a); /* Gradient colors */
+}
 </style>

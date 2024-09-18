@@ -1,6 +1,7 @@
 <template> 
     
     <!-- DADOS_USUARIO {{ JSON.stringify( DADOS_USUARIO ) }} -->
+    <label style="font-size: 10px;"> N° Identificador Psibbetter:  {{ DADOS_USUARIO.id }} </label>
       
     <v-overlay 
        v-model="overlay" 
@@ -154,6 +155,7 @@
       }
     },
     created() {
+      
         const dataAtual = new Date();
         const data = dataAtual.toISOString().split("T")[0];
         this.dataHojeBR = this.convertUSToBRDate( data )
@@ -166,6 +168,9 @@
     },
     async mounted()       {
   
+          // alert("** Meu Email: " +  this.DADOS_USUARIO.email );
+          await this.consultaDadosUsuario( this.DADOS_USUARIO.email );
+
           // Consulta os dados dos meus pacientes.
           await this.getPacientesData(); 
          
@@ -183,7 +188,7 @@
 
       },
       handleTemConsultas( val )  {
-          //alert("-Tem consultas hoje!? " + val );
+          // alert("-Tem consultas hoje!? " + val );
           this.temConsultasHoje = val;
       },
       showModal()     {

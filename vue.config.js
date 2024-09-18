@@ -17,8 +17,9 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: process.env.NODE_ENV === 'production'
-  ? 'http://paivaservices.com/psibetter/'
+  ? 'https://paivaservices.com/psibetter/dist/'
   : '/',
+  // ? 'http://paivaservices.com/psibetter/'
   
   // Definição de proxies, para driblar CROSS-ORIGIN erros
   devServer:    {

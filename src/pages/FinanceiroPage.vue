@@ -1,7 +1,7 @@
 <template>
   
    <!-- DADOS_USUARIO {{ JSON.stringify( DADOS_USUARIO ) }} -->
-   <v-container id="relatorioPDF" style="background-color: #DCEDC8;" >
+   <v-container id="relatorioPDF" >
     
     <h1 class="text-h5 text-lg-h5 mb-5 mt-5" style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
       <b> Financeiro </b>
@@ -12,20 +12,24 @@
     this.$IS_MOBILE_APP {{  this.$IS_MOBILE_APP }} -->
     
 
-    <v-form class="mt-5" v-model="this.formValido" style="background-color: #DCEDC8" ref="form">
+    <v-form class="mt-5" v-model="this.formValido"  ref="form">
           
           <!-- NOME {{ historico.nomePaciente }}
           mes {{ historico.mes  }} -->
        
-          <!-- ========================== LINHA 1================================ -->
-          <v-row>
-          <v-col cols="12" md="6">
-              <p> . </p>
+          
+
+        <!-- =======================  LINHA BOTÃO  ======================== -->
+        <v-row>
+            <v-col cols="12" md="4">
+            </v-col>
+
+            <v-col cols="12" md="4">
+
               <v-combobox
                   v-model="this.filtros.nomePaciente"
                   :rules="nomePacienteRules"
                   :items="this.MENUS_PACIENTES_NOMES"
-                  style="width:90%;"
                   prepend-inner-icon="mdi-account"
                   label="Nome do Paciente*"
                   bg-color="white"
@@ -34,9 +38,7 @@
                   density="comfortable"
                   required
               ></v-combobox>
-          </v-col>
-
-          <v-col cols="12" md="6">
+          
             <div style="display: flex; flex-direction: column;">
                 <label for="startDate">Data Inicial:
                   <input type="date" class="campo-data" id="startDate" v-model="this.filtros.dataIni">
@@ -46,19 +48,11 @@
                   <input type="date" class="campo-data" id="endDate" v-model="this.filtros.dataFim">
                 </label>
             </div>
-          </v-col>
-        </v-row>
 
-        <!-- =======================  LINHA BOTÃO  ======================== -->
-        <v-row>
-            <v-col cols="12" md="4">
-            </v-col>
-
-            <v-col cols="12" md="4">
                 <v-btn
-                  class="mb-5"
+                  class="mb-10 mt-5"
                   color="secondary"
-                  append-icon="mdi-database-arrow-up"
+                  append-icon="mdi-magnify"
                   block
                   @click="consulta()"
                 >
@@ -71,47 +65,49 @@
         </v-row>
          
        
-        <!-- consultasFiltradas {{ JSON.stringify( consultasFiltradas ) }} 
-        <div v-if="(this.consultasFiltradas.length > 0)">
-            <AppFicharioconsultaGrid v-for="(consulta, index) in consultasFiltradas" :key="index" :dados="consulta" /> 
-            <AppPrintPDF raiz="relatorioPDF" btnName="Download Relatório"/>
-        </div>-->
+        
+        
   </v-form>
 
   <v-data-table
-                    :headers="headers"
-                    :items="data"
-                    item-key="id"
-                    class="elevation-1"
-                    :mobile="this.$IS_MOBILE_APP"
-                >
-                    <!-- Slot for Data Consulta -->
-                    <template v-slot:[`item.dataConsulta`]="{ item }">
-                        <span>{{ item.dataConsulta }}</span>
-                    </template>
+        v-if="(this.data.length > 0 )"
+        :headers="headers"
+        :items="data"
+        item-key="id"
+        class="elevation-1"
+        :mobile="this.$IS_MOBILE_APP"
+    >
+        <!-- Slot for Data Consulta -->
+        <template v-slot:[`item.dataConsulta`]="{ item }">
+            <span>{{ item.dataConsulta }}</span>
+        </template>
 
-                    <!-- Slot for Data Pagamento -->
-                    <template v-slot:[`item.financeiro.dataPagamento`]="{ item }">
-                        <span>{{ item.financeiro.dataPagamento || 'N/A' }}</span>
-                    </template>
+        <!-- Slot for Data Pagamento -->
+        <template v-slot:[`item.financeiro.dataPagamento`]="{ item }">
+            <span>{{ item.financeiro.dataPagamento || 'N/A' }}</span>
+        </template>
 
-                    <!-- Slot for Nome Arquivo -->
-                    <template v-slot:[`item.financeiro.nomeArquivo`]="{ item }">
-                        <v-btn 
-                            v-if="item.financeiro.nomeArquivo" 
-                            :href="'http://paivaservices.com/psibetter/financeiro/comprovantes/' + this.DADOS_USUARIO.id + '/' + item.financeiro.nomeArquivo" 
-                            target="_blank"
-                        >
-                            {{ item.financeiro.nomeArquivo }}
-                        </v-btn>
-                        <span v-else>N/A</span>
-                    </template>
+        <!-- Slot for Nome Arquivo -->
+        <template v-slot:[`item.financeiro.nomeArquivo`]="{ item }">
+            <v-btn 
+                v-if="item.financeiro.nomeArquivo" 
+                :href="'http://paivaservices.com/psibetter/financeiro/comprovantes/' + this.DADOS_USUARIO.id + '/' + item.financeiro.nomeArquivo" 
+                target="_blank"
+            >
+                {{ item.financeiro.nomeArquivo }}
+            </v-btn>
+            <span v-else>N/A</span>
+        </template>
 
-                    <!-- Slot for Edit Action -->
-                    <template v-slot:[`item.action`]="{ item }">
-                        <v-icon @click="editItem(item)">mdi-pencil</v-icon>
-                    </template>
-                </v-data-table>
+        <!-- Slot for Edit Action -->
+        <template v-slot:[`item.action`]="{ item }">
+            <v-icon @click="editItem(item)">mdi-pencil</v-icon>
+        </template>
+      </v-data-table>
+
+        <!-- <div>
+            <AppPrintPDF raiz="relatorioPDF"/>
+        </div> -->
 
 <!-- Edit Modal -->
 <!-- ################## MODAL MODAL MODAL  MODAL MODAL MODAL MODAL MODAL MODAL MODAL ######################### -->
@@ -137,6 +133,8 @@
         <v-container>
           <v-row class="justify-center">
          <v-col cols="auto">
+
+          <!-- DATA ?!?! {{ this.dadosModal.financeiro.dataPagamento }} -->
         
           <!-- ############################ LINHA 1 ###########################-->
           <label for="startDate">Data de Pagamento: </label>
@@ -200,7 +198,19 @@
               variant="outlined"
               bg-color="white"
               required 
-          ></v-autocomplete> 
+          ></v-autocomplete>
+
+
+          <v-text-field
+              v-model="this.dadosModal.financeiro.valorPago" 
+              type="numeric"
+              density="compact"
+              max-width="400px"
+              placeholder="Informe valor pago"
+              prepend-inner-icon="mdi-currency-usd"
+              variant="outlined"
+              bg-color="white"
+          ></v-text-field>
 
           <v-card-text class="text-medium-emphasis text-caption mb-2">
             Faça o upload de comprovante de pagamento abaixo, caso necessário.
@@ -284,6 +294,8 @@
   import UtilsMixin  from '@/utils/UtilsMixin.js'; 
   import MySimpleUpload  from '@/components/MySimpleUpload.vue'; 
   import Financeiro from '@/controllers/Financeiro.js'; 
+  import AppPrintPDF  from '@/components/AppPrintPDF.vue'; 
+  
   
   const financeiro = new Financeiro();
 
@@ -292,6 +304,7 @@
     mixins: [UtilsMixin],
     components:         { 
       MySimpleUpload,
+      AppPrintPDF
     },
     data: () => ({
        
@@ -357,6 +370,7 @@
             {  title: 'Situação do Débito', value: 'financeiro.situacaoDebito' },
             {  title: 'Tipo de Pagamento', value: 'financeiro.tipoPagamento' },
             {  title: 'Comprovante', value: 'financeiro.nomeArquivo'  },
+            {  title: 'Valor Pago (R$)', value: 'financeiro.valorPago'  },
             {  title: 'Editar', value: 'action', sortable: false },
         ],
         data: [],
@@ -394,7 +408,11 @@
         ],*/
     
     }),  
-    mounted()       {
+    mounted()       { 
+
+      //const x = this.convertDataHoraAgenda("2024-08-05 22:02:00");
+      // alert("DATA = " + x );
+
       for(var i=2020; i<2050; i++ ) {
           this.anos.push( i );
       }
@@ -428,16 +446,21 @@
         this.$refs.formModal.resetValidation();
         this.currentItem.financeiro.dataPagamento = "";
       },
+
       editItem(item) {
                this.currentItem = item;
                this.dadosModal = this.currentItem;
+                
+               this.dadosModal.financeiro.dataPagamento = this.convertBRToUSDate( this.dadosModal.financeiro.dataPagamento );
+
+               // Habilita o modal
                this.dialog = true;
-               // alert( JSON.stringify( this.currentItem  ) );
+               
       },
       downloadFile() {
           // Replace with your actual PHP script URL and remote file URL
-          let phpScriptUrl = 'http://paivaservices.com/psibetter/psibetter_backend/download.php';
-          let fileUrl = 'http://paivaservices.com/psibetter/financeiro/comprovantes/fundo.png';
+          let phpScriptUrl = 'https://paivaservices.com/psibetter/psibetter_backend/download.php';
+          let fileUrl = 'https://paivaservices.com/psibetter/financeiro/comprovantes/fundo.png';
           
 
           // Create a hidden <a> element to trigger the download
@@ -448,21 +471,40 @@
           a.click();
           document.body.removeChild(a);
       },
+      /* Input => output
+      70    => 70,00
+      550   => 550,00
+      4550  => 4.550,00
+      44550 => 44.550,00 */
+      formatPayment(value)  {
+        if ( (value === null) || (value === undefined) ) {
+            return '-';
+        }
+        return value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      },
+      
+      /* INPUT 2024-08-05 22:02:00 */
+      convertDataHoraAgenda( data )           {
+          const dataHora = data.split(" ");
+          var novaDataHora = this.convertUSToBRDate( dataHora[0] );
+          return novaDataHora + " " + dataHora[1];
+      },
       /** Transforma os dados retornados pela API para o tipo de array que é suportado pela tabela */
       transformDataArray( financeiroArray ) 
       {
           return financeiroArray.map(item => ({
             id: item.financeiro.id,  // Flatten the unique identifier
-            dataConsulta: item.dataConsulta,
+            dataConsulta: this.convertDataHoraAgenda( item.dataConsulta ),
             financeiro: {
                 id: item.financeiro.id,  // Keep the nested `id`
                 idConsultaAgenda: item.financeiro.idConsultaAgenda,
-                dataPagamento: item.financeiro.dataPagamento,
+                dataPagamento: this.convertUSToBRDate( item.financeiro.dataPagamento ),
                 mesReferencia: item.financeiro.mesReferencia,
                 anoReferencia: item.financeiro.anoReferencia,
                 situacaoDebito: item.financeiro.situacaoDebito,
                 tipoPagamento: item.financeiro.tipoPagamento,
-                nomeArquivo: item.financeiro.situacaoDebito === 'aberto' ? null : item.financeiro.nomeArquivo
+                nomeArquivo: item.financeiro.situacaoDebito === 'aberto' ? null : item.financeiro.nomeArquivo,
+                valorPago: this.formatPayment( item.financeiro.valorPago )
             }
           }));
       },
@@ -471,36 +513,44 @@
 
          this.valid = await this.$refs.formModal.validate();
         
+         
         if ( this.dadosModal.financeiro.situacaoDebito == "pago" )  {
              if ( ( this.dadosModal.financeiro.dataPagamento == "" ) || ( this.dadosModal.financeiro.dataPagamento == "0000-00-00" ) 
-                || ( this.dadosModal.financeiro.dataPagamento == null ) ) 
+                || ( this.dadosModal.financeiro.dataPagamento == null ) || ( this.dadosModal.financeiro.dataPagamento == "-" ) ) 
              {
                 this.$bus.emit('showModal', { message: "Preencha a data de pagamento.", msgType: "warning"} );
-                this.valid = false;
+                this.valid.valid = false;
                 return;
              }
         } else {
 
-            // alert( "DTA PGMT = " + this.dadosModal.financeiro.dataPagamento );
+           // alert( "DTA PGMT = " + this.dadosModal.financeiro.dataPagamento );
 
             if ( ( this.dadosModal.financeiro.dataPagamento != "" ) && ( this.dadosModal.financeiro.dataPagamento != "0000-00-00" ) 
-                  && ( this.dadosModal.financeiro.dataPagamento != null ) ) 
+                  && ( this.dadosModal.financeiro.dataPagamento != null ) && ( this.dadosModal.financeiro.dataPagamento != "00/00/0000" ) 
+                  && ( this.dadosModal.financeiro.dataPagamento != "dd/mm/aaaa" ) && ( this.dadosModal.financeiro.dataPagamento != "-" ) ) 
              {
                 this.$bus.emit('showModal', { message: "Situação de débito aberto com data de pagamento definida. Altere um dos valores.", msgType: "warning"} );
-                this.valid = false;
+                this.valid.valid = false;
                 return;
              }
         }
-        if ( this.dadosModal.financeiro.dataPagamento == "0000-00-00" ) 
-             this.dadosModal.financeiro.dataPagamento = "";
+        if ( ( this.dadosModal.financeiro.dataPagamento == "0000-00-00" ) || ( this.dadosModal.financeiro.dataPagamento == "00/00/0000" ) 
+          || ( this.dadosModal.financeiro.dataPagamento == "-" ) || ( this.dadosModal.financeiro.dataPagamento == "dd/mm/aaaa" ) )  {
+                this.dadosModal.financeiro.dataPagamento = null; 
+        } 
+        if ( this.dadosModal.financeiro.valorPago == "-" ) 
+             this.dadosModal.financeiro.valorPago = null;
+        // alert( "VALIDO?!?!" + JSON.stringify( this.valid ) );
+        
 
-        if (!this.valid)  { 
-            // alert("- INVALIDO !!");
+        if (!this.valid.valid)  { 
+             // alert("- INVALIDO !!");
             return;
         } 
         console.log("-- DADOS ED ==>> " + JSON.stringify( this.dadosModal ));
 
-        const dadosFinanceiros = { 
+        var dadosFinanceiros = { 
             "keys" : 	     {
                 "idConsultaAgenda" : this.dadosModal.financeiro.idConsultaAgenda
             },
@@ -512,9 +562,15 @@
                 "anoReferencia"  : this.dadosModal.financeiro.anoReferencia,
                 "situacaoDebito" : this.dadosModal.financeiro.situacaoDebito,
                 "tipoPagamento"  : this.dadosModal.financeiro.tipoPagamento,
-                "nomeArquivo"    : this.dadosModal.financeiro.nomeArquivo
+                "nomeArquivo"    : this.dadosModal.financeiro.nomeArquivo,
+                "valorPago"      : this.dadosModal.financeiro.valorPago,
             }
-           };
+        };
+
+        if ( dadosFinanceiros.financeiro.dataPagamento == "" )        {
+             dadosFinanceiros.financeiro.dataPagamento = null;
+        }
+             
 
         // console.log("-- DADOS E.D. ==>> " + JSON.stringify( this.dadosModal ));
 
